@@ -10,7 +10,11 @@
 </app-page-header>
 
 <section class="ds-stack">
-  <form class="ds-card ds-form filter-form" [formGroup]="filterForm" (ngSubmit)="loadCrewCalls()">
+  <form
+    class="ds-card ds-form ds-filter-form"
+    [formGroup]="filterForm"
+    (ngSubmit)="loadCrewCalls()"
+  >
     <div class="ds-field">
       <label class="ds-label" for="crew-call-crew">Crew</label>
       <select

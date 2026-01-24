@@ -51,8 +51,23 @@
 
 .worker-actions {
   display: flex;
-  flex-wrap: wrap;
   gap: var(--ds-space-2);
+  flex-direction: column;
+}
+
+.worker-actions .ds-button {
+  width: 100%;
+}
+
+@media (min-width: 480px) {
+  .worker-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .worker-actions .ds-button {
+    width: auto;
+  }
 }
 
 .worker-late {
@@ -62,6 +77,7 @@
 }
 
 .late-options {
+  margin: 0;
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius);
   padding: var(--ds-space-3);
@@ -72,4 +88,20 @@
 
 .late-options legend {
   padding: 0 var(--ds-space-2);
+}
+
+.late-options label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  padding: 0 var(--ds-space-3);
+  min-height: var(--ds-space-10);
+  border-radius: var(--ds-radius-round);
+  border: 1px solid var(--ds-color-border);
+  background: var(--ds-color-bg-subtle);
+  cursor: pointer;
+}
+
+.late-options input {
+  margin: 0;
 }

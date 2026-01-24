@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OtpService {
   private static final Duration OTP_TTL = Duration.ofMinutes(10);
-  private static final Duration OTP_COOLDOWN = Duration.ofSeconds(60);
   private static final int OTP_LENGTH = 6;
   private static final int MAX_ATTEMPTS = 5;
 
@@ -26,32 +25,29 @@ public class OtpService {
   private final OtpCodeRepository otpCodeRepository;
   private final SmsProvider smsProvider;
   private final PhoneNormalizer phoneNormalizer;
+  private final OtpRateLimiter otpRateLimiter;
   private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
   private final SecureRandom random = new SecureRandom();
 
   public OtpService(IdentityRepository identityRepository,
                     OtpCodeRepository otpCodeRepository,
                     SmsProvider smsProvider,
-                    PhoneNormalizer phoneNormalizer) {
+                    PhoneNormalizer phoneNormalizer,
+                    OtpRateLimiter otpRateLimiter) {
     this.identityRepository = identityRepository;
     this.otpCodeRepository = otpCodeRepository;
     this.smsProvider = smsProvider;
     this.phoneNormalizer = phoneNormalizer;
+    this.otpRateLimiter = otpRateLimiter;
   }
 
   @Transactional
-  public String startOtp(String phoneRaw) {
+  public String startOtp(String phoneRaw, String ipAddress) {
     String phoneE164 = phoneNormalizer.normalize(phoneRaw);
+    otpRateLimiter.checkAndRecord(phoneE164, ipAddress);
+
     IdentityEntity identity = identityRepository.findByPhoneE164(phoneE164)
         .orElseGet(() -> identityRepository.save(new IdentityEntity(phoneE164)));
-
-    otpCodeRepository.findTopByIdentityIdOrderByCreatedAtDesc(identity.getId())
-        .ifPresent(existing -> {
-          Instant now = Instant.now();
-          if (existing.getCreatedAt().plus(OTP_COOLDOWN).isAfter(now)) {
-            throw new ApiException(ApiErrorCode.RATE_LIMITED, HttpStatus.TOO_MANY_REQUESTS, "Try again soon");
-          }
-        });
 
     String code = generateCode();
     String codeHash = passwordEncoder.encode(code);
@@ -59,7 +55,15 @@ public class OtpService {
     OtpCodeEntity otp = new OtpCodeEntity(identity, codeHash, now, now.plus(OTP_TTL), MAX_ATTEMPTS);
     otpCodeRepository.save(otp);
 
-    smsProvider.sendOtp(phoneE164, code);
+    try {
+      smsProvider.sendOtp(phoneE164, code);
+    } catch (Exception ex) {
+      throw new ApiException(
+          ApiErrorCode.UNKNOWN,
+          HttpStatus.SERVICE_UNAVAILABLE,
+          "Unable to send verification code"
+      );
+    }
     return phoneE164;
   }
 
