@@ -1,0 +1,10 @@
+<div class="ds-alert ds-alert--error" role="status" aria-live="polite">
+  <div class="error-banner__content">
+    <span>{{ message() }}</span>
+    @if (showRetry()) {
+      <button class="ds-button ds-button--secondary" type="button" (click)="retry.emit()">
+        {{ retryLabel() }}
+      </button>
+    }
+  </div>
+</div>
