@@ -39,7 +39,7 @@
   }
 
   @if (loading()) {
-    <div class="loading-wrap">
+    <div class="ds-loading">
       <app-loading-spinner label="Loading time entries"></app-loading-spinner>
     </div>
   } @else {
@@ -50,7 +50,7 @@
       ></app-empty-state>
     } @else {
       <form class="ds-card ds-form" [formGroup]="adjustForm" (ngSubmit)="onSubmit()">
-        <h2 class="section-title">Adjust time entry</h2>
+        <h2 class="ds-section-title ds-section-title--compact">Adjust time entry</h2>
         <div class="ds-field">
           <label class="ds-label" for="adjust-entry">Worker entry</label>
           <select

@@ -36,7 +36,7 @@
   }
 
   @if (loading()) {
-    <div class="loading-wrap">
+    <div class="ds-loading">
       <app-loading-spinner label="Loading roll call"></app-loading-spinner>
     </div>
   } @else {
@@ -47,7 +47,7 @@
       ></app-empty-state>
     } @else {
       <form class="ds-card ds-form" (ngSubmit)="submitRollCall()">
-        <h2 class="section-title">Attendance</h2>
+        <h2 class="ds-section-title ds-section-title--compact">Attendance</h2>
         <div class="roll-list">
           @for (worker of board()?.workers ?? []; track worker.membershipId) {
             <div class="roll-item">

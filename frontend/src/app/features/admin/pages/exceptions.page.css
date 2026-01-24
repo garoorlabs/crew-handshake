@@ -9,16 +9,3 @@
     align-items: end;
   }
 }
-
-.section-title {
-  margin: 0;
-  font-size: var(--ds-font-size-h3);
-  line-height: var(--ds-line-height-h3);
-  font-weight: var(--ds-font-weight-semibold);
-}
-
-.loading-wrap {
-  display: flex;
-  justify-content: center;
-  padding: var(--ds-space-4);
-}
