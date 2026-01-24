@@ -1,6 +1,8 @@
 package com.crewhandshake.features.auth.api;
 
+import com.crewhandshake.common.security.ClientIpResolver;
 import com.crewhandshake.features.auth.service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,14 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/auth")
 public class AuthController {
   private final AuthService authService;
+  private final ClientIpResolver clientIpResolver;
 
-  public AuthController(AuthService authService) {
+  public AuthController(AuthService authService, ClientIpResolver clientIpResolver) {
     this.authService = authService;
+    this.clientIpResolver = clientIpResolver;
   }
 
   @PostMapping("/otp/start")
-  public OtpStartResponse startOtp(@Valid @RequestBody OtpStartRequest request) {
-    String phoneE164 = authService.startOtp(request.phone());
+  public OtpStartResponse startOtp(@Valid @RequestBody OtpStartRequest request, HttpServletRequest httpRequest) {
+    String phoneE164 = authService.startOtp(request.phone(), clientIpResolver.resolveClientIp(httpRequest));
     return new OtpStartResponse(phoneE164);
   }
 
@@ -34,4 +38,5 @@ public class AuthController {
   public void logout() {
     authService.logout();
   }
+
 }

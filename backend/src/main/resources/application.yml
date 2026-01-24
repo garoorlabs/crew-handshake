@@ -21,3 +21,10 @@ server:
 app:
   public-base-url: ${PUBLIC_APP_BASE_URL:http://localhost:4200}
   sms-provider: ${SMS_PROVIDER:log}
+  trusted-proxies: ${TRUSTED_PROXIES:}
+  otp:
+    phone-rate-limit-max: ${OTP_RATE_LIMIT_PHONE_MAX:5}
+    phone-rate-limit-window: ${OTP_RATE_LIMIT_PHONE_WINDOW:PT15M}
+    ip-rate-limit-max: ${OTP_RATE_LIMIT_IP_MAX:20}
+    ip-rate-limit-window: ${OTP_RATE_LIMIT_IP_WINDOW:PT15M}
+    attempt-retention: ${OTP_ATTEMPT_RETENTION:PT24H}

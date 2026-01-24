@@ -20,185 +20,193 @@
         description="This link does not have an active crew call."
       ></app-empty-state>
     } @else {
-      @if (statusMessage()) {
-        <p class="ds-sr-only" role="status" aria-live="polite">{{ statusMessage() }}</p>
-      }
+      <div class="ds-stack">
+        @if (statusMessage()) {
+          <p class="ds-sr-only" role="status" aria-live="polite">{{ statusMessage() }}</p>
+        }
 
-      <section class="worker-card ds-card">
-        <header class="worker-header">
-          <h1 class="worker-title">{{ data()?.companyName }}</h1>
-          <p class="worker-text">{{ data()?.crewName }} - {{ data()?.siteName }}</p>
-        </header>
-        <div class="worker-details">
-          <div>
-            <div class="worker-label">Start time</div>
-            <div class="worker-value">{{ data()?.startAt }}</div>
-          </div>
-          <div>
-            <div class="worker-label">Meet point</div>
-            <div class="worker-value">{{ data()?.meetPoint }}</div>
-          </div>
-        </div>
-        <div class="worker-details">
-          <div>
-            <div class="worker-label">Sent by</div>
-            <div class="worker-value">{{ data()?.senderName }}</div>
-          </div>
-          <div>
-            <div class="worker-label">Status</div>
-            <app-status-badge [tone]="'info'" [label]="handshakeLabel()"></app-status-badge>
-          </div>
-        </div>
-        <a
-          class="ds-button ds-button--secondary"
-          [routerLink]="['/w/timecard', data()?.timecardToken]"
-        >
-          My hours
-        </a>
-      </section>
-
-      @if (
-        data()?.availabilityAfter &&
-        (data()?.handshakeStatus === 'CANT' || data()?.handshakeStatus === 'NEED_CHANGE')
-      ) {
         <section class="worker-card ds-card">
-          <h2 class="worker-subtitle">Not scheduled right now</h2>
-          <p class="worker-text">We'll reach out if a spot opens up today.</p>
-        </section>
-      }
-
-      @if (data()?.primaryAction === 'CONFIRM') {
-        <section class="worker-card ds-card">
-          <h2 class="worker-subtitle">Can you make it?</h2>
-          <div class="worker-actions">
-            <button
-              class="ds-button ds-button--primary"
-              type="button"
-              (click)="submitHandshake('CONFIRMED')"
-            >
-              Confirm
-            </button>
-            <button
-              class="ds-button ds-button--secondary"
-              type="button"
-              (click)="submitHandshake('LATE')"
-            >
-              I'll be late
-            </button>
-            <button
-              class="ds-button ds-button--ghost"
-              type="button"
-              (click)="submitHandshake('CANT')"
-            >
-              Can't make it
-            </button>
-            <button
-              class="ds-button ds-button--ghost"
-              type="button"
-              (click)="submitHandshake('NEED_CHANGE')"
-            >
-              Need change
-            </button>
-          </div>
-          <div class="worker-late">
-            <fieldset class="late-options">
-              <legend class="ds-label">Late by</legend>
-              <label>
-                <input
-                  type="radio"
-                  name="eta"
-                  [checked]="etaMinutes() === 10"
-                  (change)="etaMinutes.set(10)"
-                />
-                10 min
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="eta"
-                  [checked]="etaMinutes() === 15"
-                  (change)="etaMinutes.set(15)"
-                />
-                15 min
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="eta"
-                  [checked]="etaMinutes() === 30"
-                  (change)="etaMinutes.set(30)"
-                />
-                30 min
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="eta"
-                  [checked]="etaMinutes() === 60"
-                  (change)="etaMinutes.set(60)"
-                />
-                60 min
-              </label>
-            </fieldset>
-          </div>
-        </section>
-      }
-
-      @if (data()?.needsAvailability) {
-        <section class="worker-card ds-card">
-          <h2 class="worker-subtitle">When can you work?</h2>
-          <form class="ds-form" [formGroup]="availabilityForm" (ngSubmit)="submitAvailability()">
-            <div class="ds-field">
-              <label class="ds-label" for="availability-after">Availability</label>
-              <select id="availability-after" class="ds-select" formControlName="availabilityAfter">
-                <option value="AFTER_9">After 9</option>
-                <option value="AFTER_10">After 10</option>
-                <option value="AFTER_12">After 12</option>
-                <option value="NOT_TODAY">Not today</option>
-              </select>
+          <header class="worker-header">
+            <h1 class="worker-title">{{ data()?.companyName }}</h1>
+            <p class="worker-text">{{ data()?.crewName }} - {{ data()?.siteName }}</p>
+          </header>
+          <div class="worker-details">
+            <div>
+              <div class="worker-label">Start time</div>
+              <div class="worker-value">{{ data()?.startAt }}</div>
             </div>
-            <label class="ds-field ds-checkbox-field">
-              <span class="ds-label">Different site OK</span>
-              <input type="checkbox" formControlName="differentSiteOk" />
-            </label>
-            <div class="ds-field">
-              <label class="ds-label" for="availability-note">Note (optional)</label>
-              <textarea
-                id="availability-note"
-                class="ds-textarea"
-                formControlName="note"
-              ></textarea>
+            <div>
+              <div class="worker-label">Meet point</div>
+              <div class="worker-value">{{ data()?.meetPoint }}</div>
             </div>
-            <button class="ds-button ds-button--primary" type="submit">Submit availability</button>
-          </form>
+          </div>
+          <div class="worker-details">
+            <div>
+              <div class="worker-label">Sent by</div>
+              <div class="worker-value">{{ data()?.senderName }}</div>
+            </div>
+            <div>
+              <div class="worker-label">Status</div>
+              <app-status-badge [tone]="'info'" [label]="handshakeLabel()"></app-status-badge>
+            </div>
+          </div>
+          <a
+            class="ds-button ds-button--secondary"
+            [routerLink]="['/w/timecard', data()?.timecardToken]"
+          >
+            My hours
+          </a>
         </section>
-      }
 
-      @if (data()?.primaryAction === 'CHECK_IN') {
-        <section class="worker-card ds-card">
-          <h2 class="worker-subtitle">Ready to start?</h2>
-          <button class="ds-button ds-button--primary" type="button" (click)="checkIn()">
-            Check in
-          </button>
-        </section>
-      }
+        @if (
+          data()?.availabilityAfter &&
+          (data()?.handshakeStatus === 'CANT' || data()?.handshakeStatus === 'NEED_CHANGE')
+        ) {
+          <section class="worker-card ds-card">
+            <h2 class="worker-subtitle">Not scheduled right now</h2>
+            <p class="worker-text">We'll reach out if a spot opens up today.</p>
+          </section>
+        }
 
-      @if (data()?.primaryAction === 'CHECK_OUT') {
-        <section class="worker-card ds-card">
-          <h2 class="worker-subtitle">Finish your shift</h2>
-          <button class="ds-button ds-button--primary" type="button" (click)="checkOut()">
-            Check out
-          </button>
-        </section>
-      }
+        @if (data()?.primaryAction === 'CONFIRM') {
+          <section class="worker-card ds-card">
+            <h2 class="worker-subtitle">Can you make it?</h2>
+            <div class="worker-actions">
+              <button
+                class="ds-button ds-button--primary"
+                type="button"
+                (click)="submitHandshake('CONFIRMED')"
+              >
+                Confirm
+              </button>
+              <button
+                class="ds-button ds-button--secondary"
+                type="button"
+                (click)="submitHandshake('LATE')"
+              >
+                I'll be late
+              </button>
+              <button
+                class="ds-button ds-button--ghost"
+                type="button"
+                (click)="submitHandshake('CANT')"
+              >
+                Can't make it
+              </button>
+              <button
+                class="ds-button ds-button--ghost"
+                type="button"
+                (click)="submitHandshake('NEED_CHANGE')"
+              >
+                Need change
+              </button>
+            </div>
+            <div class="worker-late">
+              <fieldset class="late-options">
+                <legend class="ds-label">Late by</legend>
+                <label>
+                  <input
+                    type="radio"
+                    name="eta"
+                    [checked]="etaMinutes() === 10"
+                    (change)="etaMinutes.set(10)"
+                  />
+                  10 min
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="eta"
+                    [checked]="etaMinutes() === 15"
+                    (change)="etaMinutes.set(15)"
+                  />
+                  15 min
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="eta"
+                    [checked]="etaMinutes() === 30"
+                    (change)="etaMinutes.set(30)"
+                  />
+                  30 min
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="eta"
+                    [checked]="etaMinutes() === 60"
+                    (change)="etaMinutes.set(60)"
+                  />
+                  60 min
+                </label>
+              </fieldset>
+            </div>
+          </section>
+        }
 
-      @if (data()?.primaryAction === 'VIEW_RECEIPT') {
-        <section class="worker-card ds-card">
-          <h2 class="worker-subtitle">Receipt</h2>
-          <p class="worker-text">Check-in: {{ data()?.checkInAt }}</p>
-          <p class="worker-text">Check-out: {{ data()?.checkOutAt }}</p>
-        </section>
-      }
+        @if (data()?.needsAvailability) {
+          <section class="worker-card ds-card">
+            <h2 class="worker-subtitle">When can you work?</h2>
+            <form class="ds-form" [formGroup]="availabilityForm" (ngSubmit)="submitAvailability()">
+              <div class="ds-field">
+                <label class="ds-label" for="availability-after">Availability</label>
+                <select
+                  id="availability-after"
+                  class="ds-select"
+                  formControlName="availabilityAfter"
+                >
+                  <option value="AFTER_9">After 9</option>
+                  <option value="AFTER_10">After 10</option>
+                  <option value="AFTER_12">After 12</option>
+                  <option value="NOT_TODAY">Not today</option>
+                </select>
+              </div>
+              <label class="ds-field ds-checkbox-field">
+                <span class="ds-label">Different site OK</span>
+                <input type="checkbox" formControlName="differentSiteOk" />
+              </label>
+              <div class="ds-field">
+                <label class="ds-label" for="availability-note">Note (optional)</label>
+                <textarea
+                  id="availability-note"
+                  class="ds-textarea"
+                  formControlName="note"
+                ></textarea>
+              </div>
+              <button class="ds-button ds-button--primary" type="submit">
+                Submit availability
+              </button>
+            </form>
+          </section>
+        }
+
+        @if (data()?.primaryAction === 'CHECK_IN') {
+          <section class="worker-card ds-card">
+            <h2 class="worker-subtitle">Ready to start?</h2>
+            <button class="ds-button ds-button--primary" type="button" (click)="checkIn()">
+              Check in
+            </button>
+          </section>
+        }
+
+        @if (data()?.primaryAction === 'CHECK_OUT') {
+          <section class="worker-card ds-card">
+            <h2 class="worker-subtitle">Finish your shift</h2>
+            <button class="ds-button ds-button--primary" type="button" (click)="checkOut()">
+              Check out
+            </button>
+          </section>
+        }
+
+        @if (data()?.primaryAction === 'VIEW_RECEIPT') {
+          <section class="worker-card ds-card">
+            <h2 class="worker-subtitle">Receipt</h2>
+            <p class="worker-text">Check-in: {{ data()?.checkInAt }}</p>
+            <p class="worker-text">Check-out: {{ data()?.checkOutAt }}</p>
+          </section>
+        }
+      </div>
     }
   }
 }

@@ -33,8 +33,8 @@ public class AuthService {
     this.meService = meService;
   }
 
-  public String startOtp(String phone) {
-    return otpService.startOtp(phone);
+  public String startOtp(String phone, String ipAddress) {
+    return otpService.startOtp(phone, ipAddress);
   }
 
   @Transactional

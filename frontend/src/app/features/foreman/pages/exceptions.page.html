@@ -13,7 +13,11 @@
 </app-page-header>
 
 <section class="ds-stack">
-  <form class="ds-card ds-form filter-form" [formGroup]="filterForm" (ngSubmit)="loadExceptions()">
+  <form
+    class="ds-card ds-form ds-filter-form"
+    [formGroup]="filterForm"
+    (ngSubmit)="loadExceptions()"
+  >
     <div class="ds-field">
       <label class="ds-label" for="foreman-exception-crew">Crew</label>
       <select id="foreman-exception-crew" class="ds-select" formControlName="crewId">

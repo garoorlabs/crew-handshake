@@ -13,7 +13,7 @@
 </app-page-header>
 
 <section class="ds-stack">
-  <form class="ds-card ds-form filter-form" [formGroup]="filterForm" (ngSubmit)="loadBoard()">
+  <form class="ds-card ds-form ds-filter-form" [formGroup]="filterForm" (ngSubmit)="loadBoard()">
     <div class="ds-field">
       <label class="ds-label" for="adjust-crew">Crew</label>
       <select id="adjust-crew" class="ds-select" formControlName="crewId">

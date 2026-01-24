@@ -8,7 +8,7 @@ public class LogSmsProvider implements SmsProvider {
 
   @Override
   public void sendOtp(String phoneE164, String code) {
-    logger.info("OTP for {}: {}", phoneE164, code);
+    logger.info("OTP sent to {}", maskPhone(phoneE164));
   }
 
   @Override
@@ -24,5 +24,13 @@ public class LogSmsProvider implements SmsProvider {
   @Override
   public void sendStandbyClosure(String phoneE164, String message) {
     logger.info("Standby closure SMS to {}: {}", phoneE164, message);
+  }
+
+  private String maskPhone(String phoneE164) {
+    if (phoneE164 == null || phoneE164.length() < 4) {
+      return "unknown";
+    }
+    String last4 = phoneE164.substring(phoneE164.length() - 4);
+    return "****" + last4;
   }
 }
