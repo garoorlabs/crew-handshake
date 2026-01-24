@@ -1,5 +1,6 @@
 package com.crewhandshake.features.auth.api;
 
+import com.crewhandshake.common.security.ClientIpResolver;
 import com.crewhandshake.features.auth.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -14,14 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/auth")
 public class AuthController {
   private final AuthService authService;
+  private final ClientIpResolver clientIpResolver;
 
-  public AuthController(AuthService authService) {
+  public AuthController(AuthService authService, ClientIpResolver clientIpResolver) {
     this.authService = authService;
+    this.clientIpResolver = clientIpResolver;
   }
 
   @PostMapping("/otp/start")
   public OtpStartResponse startOtp(@Valid @RequestBody OtpStartRequest request, HttpServletRequest httpRequest) {
-    String phoneE164 = authService.startOtp(request.phone(), resolveClientIp(httpRequest));
+    String phoneE164 = authService.startOtp(request.phone(), clientIpResolver.resolveClientIp(httpRequest));
     return new OtpStartResponse(phoneE164);
   }
 
@@ -36,17 +39,4 @@ public class AuthController {
     authService.logout();
   }
 
-  private String resolveClientIp(HttpServletRequest request) {
-    String forwarded = request.getHeader("X-Forwarded-For");
-    if (forwarded != null && !forwarded.isBlank()) {
-      String[] parts = forwarded.split(",");
-      if (parts.length > 0) {
-        String first = parts[0].trim();
-        if (!first.isEmpty()) {
-          return first;
-        }
-      }
-    }
-    return request.getRemoteAddr();
-  }
 }
