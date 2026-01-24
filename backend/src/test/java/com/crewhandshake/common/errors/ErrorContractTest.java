@@ -30,4 +30,28 @@ class ErrorContractTest {
     assertThat(response.getBody().errorCode()).isEqualTo(ApiErrorCode.VALIDATION_ERROR.name());
     assertThat(response.getBody().fieldErrors()).containsKey("name");
   }
+
+  @Test
+  void unauthorizedUsesStableErrorCode() {
+    ResponseEntity<ApiErrorResponse> response = restTemplate.getForEntity(
+        "/api/v1/public/test-errors/unauthorized",
+        ApiErrorResponse.class
+    );
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    assertThat(response.getBody()).isNotNull();
+    assertThat(response.getBody().errorCode()).isEqualTo(ApiErrorCode.UNAUTHORIZED.name());
+  }
+
+  @Test
+  void forbiddenUsesStableErrorCode() {
+    ResponseEntity<ApiErrorResponse> response = restTemplate.getForEntity(
+        "/api/v1/public/test-errors/forbidden",
+        ApiErrorResponse.class
+    );
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+    assertThat(response.getBody()).isNotNull();
+    assertThat(response.getBody().errorCode()).isEqualTo(ApiErrorCode.FORBIDDEN.name());
+  }
 }
