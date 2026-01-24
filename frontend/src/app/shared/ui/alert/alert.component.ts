@@ -11,8 +11,8 @@ type AlertTone = 'info' | 'success' | 'warning' | 'error';
     class: 'ds-alert',
     '[class.ds-alert--success]': 'tone() === "success"',
     '[class.ds-alert--warning]': 'tone() === "warning"',
-    '[class.ds-alert--error]': 'tone() === "error"'
-  }
+    '[class.ds-alert--error]': 'tone() === "error"',
+  },
 })
 export class AlertComponent {
   readonly tone = input<AlertTone>('info');

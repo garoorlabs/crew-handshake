@@ -6,8 +6,8 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
   styleUrl: './retry-block.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'ds-card'
-  }
+    class: 'ds-card',
+  },
 })
 export class RetryBlockComponent {
   readonly title = input<string>('Something went wrong');

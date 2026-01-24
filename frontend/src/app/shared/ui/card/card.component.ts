@@ -6,7 +6,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrl: './card.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'ds-card'
-  }
+    class: 'ds-card',
+  },
 })
 export class CardComponent {}

@@ -8,8 +8,8 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   host: {
     class: 'ds-error-text',
     role: 'status',
-    '[attr.id]': 'id()'
-  }
+    '[attr.id]': 'id()',
+  },
 })
 export class FieldErrorComponent {
   readonly id = input<string | null>(null);

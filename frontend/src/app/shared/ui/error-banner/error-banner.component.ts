@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
   selector: 'app-error-banner',
   templateUrl: './error-banner.component.html',
   styleUrl: './error-banner.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ErrorBannerComponent {
   readonly message = input<string>('Something went wrong.');
