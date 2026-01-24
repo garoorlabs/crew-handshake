@@ -11,7 +11,7 @@
 
 <section class="ds-stack">
   <form class="ds-card ds-form" [formGroup]="form" (ngSubmit)="onSubmit()">
-    <h2 class="section-title">{{ formTitle() }}</h2>
+    <h2 class="ds-section-title">{{ formTitle() }}</h2>
     <div class="ds-field">
       <label class="ds-label" for="crew-name">Crew name</label>
       <input
@@ -92,7 +92,7 @@
   }
 
   @if (loading()) {
-    <div class="loading-wrap">
+    <div class="ds-loading">
       <app-loading-spinner label="Loading crews"></app-loading-spinner>
     </div>
   } @else {
