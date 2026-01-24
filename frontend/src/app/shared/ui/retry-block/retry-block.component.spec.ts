@@ -7,7 +7,7 @@ describe('RetryBlockComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RetryBlockComponent]
+      imports: [RetryBlockComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RetryBlockComponent);

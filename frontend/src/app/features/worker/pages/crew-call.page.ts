@@ -1,17 +1,28 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { WorkerApi, ApiError, WorkerCrewCallResponse, WorkerAvailabilityRequest } from '../data-access/worker.api';
+import {
+  WorkerApi,
+  ApiError,
+  WorkerCrewCallResponse,
+  WorkerAvailabilityRequest,
+} from '../data-access/worker.api';
 import { EmptyStateComponent } from '../../../shared/ui/empty-state/empty-state.component';
 import { LoadingSpinnerComponent } from '../../../shared/ui/loading-spinner/loading-spinner.component';
 import { StatusBadgeComponent } from '../../../shared/ui/status-badge/status-badge.component';
 
 @Component({
   selector: 'app-worker-crew-call-page',
-  imports: [ReactiveFormsModule, RouterLink, EmptyStateComponent, LoadingSpinnerComponent, StatusBadgeComponent],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    EmptyStateComponent,
+    LoadingSpinnerComponent,
+    StatusBadgeComponent,
+  ],
   templateUrl: './crew-call.page.html',
   styleUrl: './crew-call.page.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WorkerCrewCallPage {
   private readonly route = inject(ActivatedRoute);
@@ -28,7 +39,7 @@ export class WorkerCrewCallPage {
   readonly availabilityForm = this.formBuilder.nonNullable.group({
     availabilityAfter: ['AFTER_9', [Validators.required]],
     differentSiteOk: [false],
-    note: ['']
+    note: [''],
   });
 
   readonly handshakeLabel = computed(() => {
@@ -77,7 +88,7 @@ export class WorkerCrewCallPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -88,9 +99,7 @@ export class WorkerCrewCallPage {
     }
     this.loading.set(true);
     this.error.set(null);
-    const request = status === 'LATE'
-      ? { status, lateEtaMinutes: this.etaMinutes() }
-      : { status };
+    const request = status === 'LATE' ? { status, lateEtaMinutes: this.etaMinutes() } : { status };
     this.workerApi.submitHandshake(token, request).subscribe({
       next: (response) => {
         this.data.set(response);
@@ -100,7 +109,7 @@ export class WorkerCrewCallPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -114,24 +123,27 @@ export class WorkerCrewCallPage {
       return;
     }
     const payload = this.availabilityForm.getRawValue();
-    const availabilityAfter = payload.availabilityAfter as WorkerAvailabilityRequest['availabilityAfter'];
+    const availabilityAfter =
+      payload.availabilityAfter as WorkerAvailabilityRequest['availabilityAfter'];
     this.loading.set(true);
     this.error.set(null);
-    this.workerApi.submitAvailability(token, {
-      availabilityAfter,
-      differentSiteOk: payload.differentSiteOk,
-      note: payload.note
-    }).subscribe({
-      next: (response) => {
-        this.data.set(response);
-        this.statusMessage.set('Availability submitted.');
-        this.loading.set(false);
-      },
-      error: (error: ApiError) => {
-        this.error.set(error);
-        this.loading.set(false);
-      }
-    });
+    this.workerApi
+      .submitAvailability(token, {
+        availabilityAfter,
+        differentSiteOk: payload.differentSiteOk,
+        note: payload.note,
+      })
+      .subscribe({
+        next: (response) => {
+          this.data.set(response);
+          this.statusMessage.set('Availability submitted.');
+          this.loading.set(false);
+        },
+        error: (error: ApiError) => {
+          this.error.set(error);
+          this.loading.set(false);
+        },
+      });
   }
 
   checkIn(): void {
@@ -149,7 +161,7 @@ export class WorkerCrewCallPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -168,7 +180,7 @@ export class WorkerCrewCallPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 }

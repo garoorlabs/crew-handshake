@@ -25,15 +25,15 @@ const errorCodeMap: Record<string, ApiErrorCategory> = {
   FORBIDDEN: 'Forbidden',
   NOT_FOUND: 'NotFound',
   VALIDATION_ERROR: 'Validation',
-  RATE_LIMITED: 'RateLimited'
+  RATE_LIMITED: 'RateLimited',
 };
 
 export function mapHttpError(error: HttpErrorResponse): ApiError {
   const payload = error.error as ApiErrorResponse | null;
-  const category = payload?.errorCode ? errorCodeMap[payload.errorCode] ?? 'Unknown' : 'Unknown';
+  const category = payload?.errorCode ? (errorCodeMap[payload.errorCode] ?? 'Unknown') : 'Unknown';
   return {
     category,
     message: payload?.message ?? 'Something went wrong',
-    fieldErrors: payload?.fieldErrors
+    fieldErrors: payload?.fieldErrors,
   };
 }

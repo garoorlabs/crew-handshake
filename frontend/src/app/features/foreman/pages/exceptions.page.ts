@@ -1,6 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ForemanApi, ApiError, ExceptionResponse, ForemanCrewSummary } from '../data-access/foreman.api';
+import {
+  ForemanApi,
+  ApiError,
+  ExceptionResponse,
+  ForemanCrewSummary,
+} from '../data-access/foreman.api';
 import { EmptyStateComponent } from '../../../shared/ui/empty-state/empty-state.component';
 import { PageHeaderComponent } from '../../../shared/ui/page-header/page-header.component';
 import { LoadingSpinnerComponent } from '../../../shared/ui/loading-spinner/loading-spinner.component';
@@ -8,10 +13,16 @@ import { StatusBadgeComponent } from '../../../shared/ui/status-badge/status-bad
 
 @Component({
   selector: 'app-foreman-exceptions-page',
-  imports: [ReactiveFormsModule, EmptyStateComponent, PageHeaderComponent, LoadingSpinnerComponent, StatusBadgeComponent],
+  imports: [
+    ReactiveFormsModule,
+    EmptyStateComponent,
+    PageHeaderComponent,
+    LoadingSpinnerComponent,
+    StatusBadgeComponent,
+  ],
   templateUrl: './exceptions.page.html',
   styleUrl: './exceptions.page.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ForemanExceptionsPage {
   private readonly foremanApi = inject(ForemanApi);
@@ -24,7 +35,7 @@ export class ForemanExceptionsPage {
 
   readonly filterForm = this.formBuilder.nonNullable.group({
     crewId: ['', [Validators.required]],
-    date: [this.today(), [Validators.required]]
+    date: [this.today(), [Validators.required]],
   });
 
   readonly resolveForm = this.formBuilder.nonNullable.group({
@@ -33,7 +44,7 @@ export class ForemanExceptionsPage {
     checkInAt: [''],
     checkOutAt: [''],
     reason: [''],
-    note: ['']
+    note: [''],
   });
 
   readonly selectedException = computed(() => {
@@ -61,7 +72,7 @@ export class ForemanExceptionsPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -84,7 +95,7 @@ export class ForemanExceptionsPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -99,7 +110,7 @@ export class ForemanExceptionsPage {
       checkInAt: payload.checkInAt ? this.toIso(payload.checkInAt) : null,
       checkOutAt: payload.checkOutAt ? this.toIso(payload.checkOutAt) : null,
       reason: payload.reason || null,
-      note: payload.note || null
+      note: payload.note || null,
     };
     this.loading.set(true);
     this.error.set(null);
@@ -110,7 +121,7 @@ export class ForemanExceptionsPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 

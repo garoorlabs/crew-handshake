@@ -8,10 +8,16 @@ import { StatusBadgeComponent } from '../../../shared/ui/status-badge/status-bad
 
 @Component({
   selector: 'app-admin-foremen-page',
-  imports: [ReactiveFormsModule, EmptyStateComponent, PageHeaderComponent, LoadingSpinnerComponent, StatusBadgeComponent],
+  imports: [
+    ReactiveFormsModule,
+    EmptyStateComponent,
+    PageHeaderComponent,
+    LoadingSpinnerComponent,
+    StatusBadgeComponent,
+  ],
   templateUrl: './foremen.page.html',
   styleUrl: './foremen.page.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminForemenPage {
   private readonly adminApi = inject(AdminApi);
@@ -25,7 +31,7 @@ export class AdminForemenPage {
   readonly form = this.formBuilder.nonNullable.group({
     displayName: ['', [Validators.required]],
     phone: ['', [Validators.required]],
-    active: [true]
+    active: [true],
   });
 
   readonly isEditing = computed(() => !!this.editingId());
@@ -47,7 +53,7 @@ export class AdminForemenPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -56,7 +62,7 @@ export class AdminForemenPage {
     this.form.reset({
       displayName: foreman.displayName,
       phone: foreman.phoneE164,
-      active: foreman.active
+      active: foreman.active,
     });
     this.form.controls.phone.disable();
   }
@@ -66,7 +72,7 @@ export class AdminForemenPage {
     this.form.reset({
       displayName: '',
       phone: '',
-      active: true
+      active: true,
     });
     this.form.controls.phone.enable();
   }
@@ -81,11 +87,32 @@ export class AdminForemenPage {
     const payload = this.form.getRawValue();
 
     if (this.isEditing() && this.editingId()) {
-      this.adminApi.updateForeman({
-        membershipId: this.editingId()!,
+      this.adminApi
+        .updateForeman({
+          membershipId: this.editingId()!,
+          displayName: payload.displayName,
+          active: payload.active,
+        })
+        .subscribe({
+          next: () => {
+            this.onCancelEdit();
+            this.load();
+          },
+          error: (error: ApiError) => {
+            this.error.set(error);
+            this.loading.set(false);
+          },
+        });
+      return;
+    }
+
+    this.adminApi
+      .createForeman({
         displayName: payload.displayName,
-        active: payload.active
-      }).subscribe({
+        phone: payload.phone,
+        active: payload.active,
+      })
+      .subscribe({
         next: () => {
           this.onCancelEdit();
           this.load();
@@ -93,25 +120,8 @@ export class AdminForemenPage {
         error: (error: ApiError) => {
           this.error.set(error);
           this.loading.set(false);
-        }
+        },
       });
-      return;
-    }
-
-    this.adminApi.createForeman({
-      displayName: payload.displayName,
-      phone: payload.phone,
-      active: payload.active
-    }).subscribe({
-      next: () => {
-        this.onCancelEdit();
-        this.load();
-      },
-      error: (error: ApiError) => {
-        this.error.set(error);
-        this.loading.set(false);
-      }
-    });
   }
 
   trackById(index: number, foreman: ForemanResponse): string {

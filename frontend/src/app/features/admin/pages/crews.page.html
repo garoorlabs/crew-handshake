@@ -1,5 +1,12 @@
 <app-page-header title="Crews" subtitle="Assign foremen and roster workers.">
-  <button class="ds-button ds-button--secondary" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+  <button
+    class="ds-button ds-button--secondary"
+    type="button"
+    (click)="load()"
+    [disabled]="loading()"
+  >
+    Refresh
+  </button>
 </app-page-header>
 
 <section class="ds-stack">
@@ -27,9 +34,13 @@
         id="crew-foreman"
         class="ds-select"
         formControlName="foremanMembershipId"
-        [class.ds-select--error]="form.controls.foremanMembershipId.touched && form.controls.foremanMembershipId.invalid"
+        [class.ds-select--error]="
+          form.controls.foremanMembershipId.touched && form.controls.foremanMembershipId.invalid
+        "
         aria-describedby="crew-foreman-error"
-        [attr.aria-invalid]="form.controls.foremanMembershipId.touched && form.controls.foremanMembershipId.invalid"
+        [attr.aria-invalid]="
+          form.controls.foremanMembershipId.touched && form.controls.foremanMembershipId.invalid
+        "
       >
         <option value="">Select foreman</option>
         @for (foreman of foremen(); track foreman.membershipId) {
@@ -62,7 +73,12 @@
         {{ submitLabel() }}
       </button>
       @if (isEditing()) {
-        <button class="ds-button ds-button--ghost" type="button" (click)="onCancelEdit()" [disabled]="loading()">
+        <button
+          class="ds-button ds-button--ghost"
+          type="button"
+          (click)="onCancelEdit()"
+          [disabled]="loading()"
+        >
           Cancel
         </button>
       }
@@ -81,7 +97,10 @@
     </div>
   } @else {
     @if (crews().length === 0) {
-      <app-empty-state title="No crews yet" description="Create a crew and assign its roster."></app-empty-state>
+      <app-empty-state
+        title="No crews yet"
+        description="Create a crew and assign its roster."
+      ></app-empty-state>
     } @else {
       <div class="ds-table-wrap">
         <table class="ds-table" aria-label="Crews">

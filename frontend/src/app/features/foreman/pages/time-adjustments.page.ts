@@ -1,6 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ForemanApi, ApiError, ForemanCrewSummary, TodayBoardResponse } from '../data-access/foreman.api';
+import {
+  ForemanApi,
+  ApiError,
+  ForemanCrewSummary,
+  TodayBoardResponse,
+} from '../data-access/foreman.api';
 import { PageHeaderComponent } from '../../../shared/ui/page-header/page-header.component';
 import { EmptyStateComponent } from '../../../shared/ui/empty-state/empty-state.component';
 import { LoadingSpinnerComponent } from '../../../shared/ui/loading-spinner/loading-spinner.component';
@@ -10,7 +15,7 @@ import { LoadingSpinnerComponent } from '../../../shared/ui/loading-spinner/load
   imports: [ReactiveFormsModule, PageHeaderComponent, EmptyStateComponent, LoadingSpinnerComponent],
   templateUrl: './time-adjustments.page.html',
   styleUrl: './time-adjustments.page.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ForemanTimeAdjustmentsPage {
   private readonly foremanApi = inject(ForemanApi);
@@ -23,7 +28,7 @@ export class ForemanTimeAdjustmentsPage {
 
   readonly filterForm = this.formBuilder.nonNullable.group({
     crewId: ['', [Validators.required]],
-    date: [this.today(), [Validators.required]]
+    date: [this.today(), [Validators.required]],
   });
 
   readonly adjustForm = this.formBuilder.nonNullable.group({
@@ -31,11 +36,11 @@ export class ForemanTimeAdjustmentsPage {
     checkInAt: ['', [Validators.required]],
     checkOutAt: ['', [Validators.required]],
     reason: ['', [Validators.required]],
-    note: ['']
+    note: [''],
   });
 
   readonly adjustableEntries = computed(() =>
-    (this.board()?.workers ?? []).filter((worker) => !!worker.timeEntryId)
+    (this.board()?.workers ?? []).filter((worker) => !!worker.timeEntryId),
   );
 
   constructor() {
@@ -56,7 +61,7 @@ export class ForemanTimeAdjustmentsPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -76,7 +81,7 @@ export class ForemanTimeAdjustmentsPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -88,7 +93,7 @@ export class ForemanTimeAdjustmentsPage {
     this.adjustForm.patchValue({
       timeEntryId: entry.timeEntryId ?? '',
       checkInAt: entry.checkInAt ? this.toLocalInput(entry.checkInAt) : '',
-      checkOutAt: entry.checkOutAt ? this.toLocalInput(entry.checkOutAt) : ''
+      checkOutAt: entry.checkOutAt ? this.toLocalInput(entry.checkOutAt) : '',
     });
   }
 
@@ -100,21 +105,23 @@ export class ForemanTimeAdjustmentsPage {
     this.loading.set(true);
     this.error.set(null);
     const payload = this.adjustForm.getRawValue();
-    this.foremanApi.adjustTime({
-      timeEntryId: payload.timeEntryId,
-      checkInAt: new Date(payload.checkInAt).toISOString(),
-      checkOutAt: new Date(payload.checkOutAt).toISOString(),
-      reason: payload.reason,
-      note: payload.note
-    }).subscribe({
-      next: () => {
-        this.loadBoard();
-      },
-      error: (error: ApiError) => {
-        this.error.set(error);
-        this.loading.set(false);
-      }
-    });
+    this.foremanApi
+      .adjustTime({
+        timeEntryId: payload.timeEntryId,
+        checkInAt: new Date(payload.checkInAt).toISOString(),
+        checkOutAt: new Date(payload.checkOutAt).toISOString(),
+        reason: payload.reason,
+        note: payload.note,
+      })
+      .subscribe({
+        next: () => {
+          this.loadBoard();
+        },
+        error: (error: ApiError) => {
+          this.error.set(error);
+          this.loading.set(false);
+        },
+      });
   }
 
   private toLocalInput(value: string): string {

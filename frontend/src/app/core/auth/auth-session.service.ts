@@ -22,8 +22,8 @@ export class AuthSessionService {
         error: (error: ApiError) => {
           this.me.set(null);
           this.error.set(error);
-        }
-      })
+        },
+      }),
     );
   }
 
@@ -36,8 +36,8 @@ export class AuthSessionService {
       tap({
         error: (error: ApiError) => {
           this.error.set(error);
-        }
-      })
+        },
+      }),
     );
   }
 
@@ -50,8 +50,8 @@ export class AuthSessionService {
       tap({
         error: (error: ApiError) => {
           this.error.set(error);
-        }
-      })
+        },
+      }),
     );
   }
 

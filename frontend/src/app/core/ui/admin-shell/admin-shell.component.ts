@@ -9,8 +9,8 @@ import { AuthSessionService } from '../../auth/auth-session.service';
   styleUrl: './admin-shell.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'ds-layout-admin'
-  }
+    class: 'ds-layout-admin',
+  },
 })
 export class AdminShellComponent {
   private readonly session = inject(AuthSessionService);
@@ -23,7 +23,7 @@ export class AdminShellComponent {
       },
       error: () => {
         this.router.navigate(['/auth']);
-      }
+      },
     });
   }
 

@@ -9,7 +9,7 @@ import { LoadingSpinnerComponent } from '../../../shared/ui/loading-spinner/load
   imports: [PageHeaderComponent, EmptyStateComponent, LoadingSpinnerComponent],
   templateUrl: './audit.page.html',
   styleUrl: './audit.page.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminAuditPage {
   private readonly adminApi = inject(AdminApi);
@@ -33,7 +33,7 @@ export class AdminAuditPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 }

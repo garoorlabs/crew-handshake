@@ -1,5 +1,12 @@
 <app-page-header title="Audit log" subtitle="Track sensitive actions and edits.">
-  <button class="ds-button ds-button--secondary" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+  <button
+    class="ds-button ds-button--secondary"
+    type="button"
+    (click)="load()"
+    [disabled]="loading()"
+  >
+    Refresh
+  </button>
 </app-page-header>
 
 <section class="ds-stack">
@@ -15,7 +22,10 @@
     </div>
   } @else {
     @if (logs().length === 0) {
-      <app-empty-state title="No audit events yet" description="Actions like time edits will appear here."></app-empty-state>
+      <app-empty-state
+        title="No audit events yet"
+        description="Actions like time edits will appear here."
+      ></app-empty-state>
     } @else {
       <div class="ds-table-wrap">
         <table class="ds-table" aria-label="Audit log">

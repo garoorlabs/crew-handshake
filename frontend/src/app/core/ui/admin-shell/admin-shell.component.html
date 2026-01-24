@@ -4,18 +4,39 @@
     <div class="shell__inner">
       <div class="shell__brand">Crew Handshake</div>
       <nav class="shell__nav" aria-label="Admin">
-        <a class="shell__link" routerLink="/a/workers" routerLinkActive="shell__link--active">Workers</a>
-        <a class="shell__link" routerLink="/a/foremen" routerLinkActive="shell__link--active">Foremen</a>
-        <a class="shell__link" routerLink="/a/crews" routerLinkActive="shell__link--active">Crews</a>
-        <a class="shell__link" routerLink="/a/sites" routerLinkActive="shell__link--active">Sites</a>
-        <a class="shell__link" routerLink="/a/settings" routerLinkActive="shell__link--active">Settings</a>
-        <a class="shell__link" routerLink="/a/exceptions" routerLinkActive="shell__link--active">Exceptions</a>
-        <a class="shell__link" routerLink="/a/payroll" routerLinkActive="shell__link--active">Payroll</a>
-        <a class="shell__link" routerLink="/a/audit" routerLinkActive="shell__link--active">Audit</a>
+        <a class="shell__link" routerLink="/a/workers" routerLinkActive="shell__link--active"
+          >Workers</a
+        >
+        <a class="shell__link" routerLink="/a/foremen" routerLinkActive="shell__link--active"
+          >Foremen</a
+        >
+        <a class="shell__link" routerLink="/a/crews" routerLinkActive="shell__link--active"
+          >Crews</a
+        >
+        <a class="shell__link" routerLink="/a/sites" routerLinkActive="shell__link--active"
+          >Sites</a
+        >
+        <a class="shell__link" routerLink="/a/settings" routerLinkActive="shell__link--active"
+          >Settings</a
+        >
+        <a class="shell__link" routerLink="/a/exceptions" routerLinkActive="shell__link--active"
+          >Exceptions</a
+        >
+        <a class="shell__link" routerLink="/a/payroll" routerLinkActive="shell__link--active"
+          >Payroll</a
+        >
+        <a class="shell__link" routerLink="/a/audit" routerLinkActive="shell__link--active"
+          >Audit</a
+        >
       </nav>
       <div class="shell__spacer"></div>
       <div class="shell__actions">
-        <button class="ds-button ds-button--ghost" type="button" (click)="logout()" [disabled]="isLoggingOut">
+        <button
+          class="ds-button ds-button--ghost"
+          type="button"
+          (click)="logout()"
+          [disabled]="isLoggingOut"
+        >
           Log out
         </button>
       </div>

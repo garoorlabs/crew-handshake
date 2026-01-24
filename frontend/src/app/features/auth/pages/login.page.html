@@ -57,7 +57,12 @@
         <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">
           {{ loading() ? 'Verifying...' : 'Verify code' }}
         </button>
-        <button class="ds-button ds-button--ghost" type="button" (click)="onEditPhone()" [disabled]="loading()">
+        <button
+          class="ds-button ds-button--ghost"
+          type="button"
+          (click)="onEditPhone()"
+          [disabled]="loading()"
+        >
           Edit phone
         </button>
       </div>
@@ -71,15 +76,32 @@
     <p class="auth-subtitle">One-click login for the seeded demo users.</p>
   </header>
   <div class="auth-actions">
-    <button class="ds-button ds-button--primary" type="button" (click)="onDemoLogin('admin')" [disabled]="loading()">
+    <button
+      class="ds-button ds-button--primary"
+      type="button"
+      (click)="onDemoLogin('admin')"
+      [disabled]="loading()"
+    >
       Admin demo
     </button>
-    <button class="ds-button ds-button--secondary" type="button" (click)="onDemoLogin('foreman')" [disabled]="loading()">
+    <button
+      class="ds-button ds-button--secondary"
+      type="button"
+      (click)="onDemoLogin('foreman')"
+      [disabled]="loading()"
+    >
       Foreman demo
     </button>
-    <button class="ds-button ds-button--ghost" type="button" (click)="onOpenWorkerDemo()" [disabled]="loading()">
+    <button
+      class="ds-button ds-button--ghost"
+      type="button"
+      (click)="onOpenWorkerDemo()"
+      [disabled]="loading()"
+    >
       Open worker demo
     </button>
   </div>
-  <p class="ds-helper">Uses seeded phones: Admin +14155550100, Foreman +14155550101, Worker +14155550102.</p>
+  <p class="ds-helper">
+    Uses seeded phones: Admin +14155550100, Foreman +14155550101, Worker +14155550102.
+  </p>
 </section>

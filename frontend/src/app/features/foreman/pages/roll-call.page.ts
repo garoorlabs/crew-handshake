@@ -1,6 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ForemanApi, ApiError, ForemanCrewSummary, RollCallRequest, RollCallStatus, TodayBoardResponse } from '../data-access/foreman.api';
+import {
+  ForemanApi,
+  ApiError,
+  ForemanCrewSummary,
+  RollCallRequest,
+  RollCallStatus,
+  TodayBoardResponse,
+} from '../data-access/foreman.api';
 import { PageHeaderComponent } from '../../../shared/ui/page-header/page-header.component';
 import { EmptyStateComponent } from '../../../shared/ui/empty-state/empty-state.component';
 import { LoadingSpinnerComponent } from '../../../shared/ui/loading-spinner/loading-spinner.component';
@@ -10,7 +17,7 @@ import { LoadingSpinnerComponent } from '../../../shared/ui/loading-spinner/load
   imports: [ReactiveFormsModule, PageHeaderComponent, EmptyStateComponent, LoadingSpinnerComponent],
   templateUrl: './roll-call.page.html',
   styleUrl: './roll-call.page.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ForemanRollCallPage {
   private readonly foremanApi = inject(ForemanApi);
@@ -24,7 +31,7 @@ export class ForemanRollCallPage {
 
   readonly filterForm = this.formBuilder.nonNullable.group({
     crewId: ['', [Validators.required]],
-    date: [this.today(), [Validators.required]]
+    date: [this.today(), [Validators.required]],
   });
 
   constructor() {
@@ -45,7 +52,7 @@ export class ForemanRollCallPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -70,7 +77,7 @@ export class ForemanRollCallPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -85,7 +92,7 @@ export class ForemanRollCallPage {
     const { crewId, date } = this.filterForm.getRawValue();
     const entries = Object.entries(this.entries()).map(([workerMembershipId, status]) => ({
       workerMembershipId,
-      status
+      status,
     }));
     const request: RollCallRequest = { crewId, date, entries };
     this.loading.set(true);
@@ -97,7 +104,7 @@ export class ForemanRollCallPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 

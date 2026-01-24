@@ -10,7 +10,7 @@ export const workerRoutes: Routes = [
     children: [
       { path: '', component: WorkerCrewCallPage },
       { path: 't/:token', component: WorkerCrewCallPage },
-      { path: 'timecard/:token', component: WorkerTimecardPage }
-    ]
-  }
+      { path: 'timecard/:token', component: WorkerTimecardPage },
+    ],
+  },
 ];

@@ -28,6 +28,6 @@ export const activeCompanyGuard: CanActivateFn = () => {
       session.clearLocalSession();
       router.navigate(['/auth/login']);
       return of(false);
-    })
+    }),
   );
 };

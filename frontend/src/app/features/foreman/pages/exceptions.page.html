@@ -1,5 +1,13 @@
-<app-page-header title="Exceptions" subtitle="Resolve missing punches and review requests for your crew.">
-  <button class="ds-button ds-button--secondary" type="button" (click)="loadExceptions()" [disabled]="loading()">
+<app-page-header
+  title="Exceptions"
+  subtitle="Resolve missing punches and review requests for your crew."
+>
+  <button
+    class="ds-button ds-button--secondary"
+    type="button"
+    (click)="loadExceptions()"
+    [disabled]="loading()"
+  >
     Refresh
   </button>
 </app-page-header>
@@ -19,7 +27,9 @@
       <label class="ds-label" for="foreman-exception-date">Date</label>
       <input id="foreman-exception-date" class="ds-input" type="date" formControlName="date" />
     </div>
-    <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">Load exceptions</button>
+    <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">
+      Load exceptions
+    </button>
   </form>
 
   @if (error()) {
@@ -34,7 +44,10 @@
     </div>
   } @else {
     @if (exceptions().length === 0) {
-      <app-empty-state title="No exceptions" description="This crew has no open exceptions for the selected date."></app-empty-state>
+      <app-empty-state
+        title="No exceptions"
+        description="This crew has no open exceptions for the selected date."
+      ></app-empty-state>
     } @else {
       <div class="ds-table-wrap">
         <table class="ds-table" aria-label="Exceptions">
@@ -92,11 +105,21 @@
       @if (resolveForm.controls.action.value === 'ADJUST_TIME') {
         <div class="ds-field">
           <label class="ds-label" for="foreman-checkin">Check-in</label>
-          <input id="foreman-checkin" class="ds-input" type="datetime-local" formControlName="checkInAt" />
+          <input
+            id="foreman-checkin"
+            class="ds-input"
+            type="datetime-local"
+            formControlName="checkInAt"
+          />
         </div>
         <div class="ds-field">
           <label class="ds-label" for="foreman-checkout">Check-out</label>
-          <input id="foreman-checkout" class="ds-input" type="datetime-local" formControlName="checkOutAt" />
+          <input
+            id="foreman-checkout"
+            class="ds-input"
+            type="datetime-local"
+            formControlName="checkOutAt"
+          />
         </div>
       }
 
@@ -110,7 +133,9 @@
         <textarea id="foreman-note" class="ds-textarea" formControlName="note"></textarea>
       </div>
 
-      <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">Resolve</button>
+      <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">
+        Resolve
+      </button>
     </form>
   }
 </section>

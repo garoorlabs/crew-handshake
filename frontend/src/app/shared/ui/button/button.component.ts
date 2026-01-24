@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
   selector: 'app-button',
   templateUrl: './button.component.html',
   styleUrl: './button.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonComponent {
   readonly variant = input<'primary' | 'secondary' | 'ghost' | 'destructive'>('primary');

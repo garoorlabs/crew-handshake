@@ -1,5 +1,12 @@
 <app-page-header title="Roll call" subtitle="Mark attendance when workers can't use the link.">
-  <button class="ds-button ds-button--secondary" type="button" (click)="loadBoard()" [disabled]="loading()">Refresh</button>
+  <button
+    class="ds-button ds-button--secondary"
+    type="button"
+    (click)="loadBoard()"
+    [disabled]="loading()"
+  >
+    Refresh
+  </button>
 </app-page-header>
 
 <section class="ds-stack">
@@ -17,7 +24,9 @@
       <label class="ds-label" for="roll-date">Date</label>
       <input id="roll-date" class="ds-input" type="date" formControlName="date" />
     </div>
-    <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">Load roster</button>
+    <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">
+      Load roster
+    </button>
   </form>
 
   @if (error()) {
@@ -32,7 +41,10 @@
     </div>
   } @else {
     @if (!board() || board()?.workers?.length === 0) {
-      <app-empty-state title="No roster loaded" description="Select a crew to start roll call."></app-empty-state>
+      <app-empty-state
+        title="No roster loaded"
+        description="Select a crew to start roll call."
+      ></app-empty-state>
     } @else {
       <form class="ds-card ds-form" (ngSubmit)="submitRollCall()">
         <h2 class="section-title">Attendance</h2>
@@ -43,7 +55,11 @@
                 <div class="roll-name">{{ worker.displayName }}</div>
                 <div class="roll-phone">{{ worker.phoneE164 }}</div>
               </div>
-              <div class="roll-options" role="group" [attr.aria-label]="'Attendance for ' + worker.displayName">
+              <div
+                class="roll-options"
+                role="group"
+                [attr.aria-label]="'Attendance for ' + worker.displayName"
+              >
                 <label>
                   <input
                     type="radio"
@@ -75,7 +91,9 @@
             </div>
           }
         </div>
-        <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">Submit roll call</button>
+        <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">
+          Submit roll call
+        </button>
       </form>
     }
   }

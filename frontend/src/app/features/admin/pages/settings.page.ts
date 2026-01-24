@@ -9,7 +9,7 @@ import { LoadingSpinnerComponent } from '../../../shared/ui/loading-spinner/load
   imports: [ReactiveFormsModule, PageHeaderComponent, LoadingSpinnerComponent],
   templateUrl: './settings.page.html',
   styleUrl: './settings.page.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminSettingsPage {
   private readonly adminApi = inject(AdminApi);
@@ -23,7 +23,7 @@ export class AdminSettingsPage {
     payrollFrequency: ['WEEKLY', [Validators.required]],
     payrollCutoffDay: ['FRIDAY', [Validators.required]],
     standbyCutoffTime: ['18:00', [Validators.required]],
-    dispatchAuthority: ['HYBRID', [Validators.required]]
+    dispatchAuthority: ['HYBRID', [Validators.required]],
   });
 
   constructor() {
@@ -41,7 +41,7 @@ export class AdminSettingsPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -51,7 +51,7 @@ export class AdminSettingsPage {
       payrollFrequency: settings.payrollFrequency,
       payrollCutoffDay: settings.payrollCutoffDay,
       standbyCutoffTime: settings.standbyCutoffTime,
-      dispatchAuthority: settings.dispatchAuthority
+      dispatchAuthority: settings.dispatchAuthority,
     });
   }
 
@@ -63,21 +63,23 @@ export class AdminSettingsPage {
     this.loading.set(true);
     this.error.set(null);
     const payload = this.form.getRawValue();
-    this.adminApi.updateSettings({
-      defaultLanguage: payload.defaultLanguage,
-      payrollFrequency: payload.payrollFrequency as 'WEEKLY' | 'BIWEEKLY',
-      payrollCutoffDay: payload.payrollCutoffDay,
-      standbyCutoffTime: payload.standbyCutoffTime,
-      dispatchAuthority: payload.dispatchAuthority as 'HYBRID'
-    }).subscribe({
-      next: (settings) => {
-        this.applySettings(settings);
-        this.loading.set(false);
-      },
-      error: (error: ApiError) => {
-        this.error.set(error);
-        this.loading.set(false);
-      }
-    });
+    this.adminApi
+      .updateSettings({
+        defaultLanguage: payload.defaultLanguage,
+        payrollFrequency: payload.payrollFrequency as 'WEEKLY' | 'BIWEEKLY',
+        payrollCutoffDay: payload.payrollCutoffDay,
+        standbyCutoffTime: payload.standbyCutoffTime,
+        dispatchAuthority: payload.dispatchAuthority as 'HYBRID',
+      })
+      .subscribe({
+        next: (settings) => {
+          this.applySettings(settings);
+          this.loading.set(false);
+        },
+        error: (error: ApiError) => {
+          this.error.set(error);
+          this.loading.set(false);
+        },
+      });
   }
 }

@@ -5,7 +5,7 @@ describe('mapHttpError', () => {
   it('maps known error codes', () => {
     const error = new HttpErrorResponse({
       status: 403,
-      error: { errorCode: 'FORBIDDEN', message: 'Not permitted' }
+      error: { errorCode: 'FORBIDDEN', message: 'Not permitted' },
     });
 
     const mapped = mapHttpError(error);
@@ -17,7 +17,7 @@ describe('mapHttpError', () => {
   it('falls back to Unknown', () => {
     const error = new HttpErrorResponse({
       status: 500,
-      error: { errorCode: 'NOT_A_CODE', message: 'Oops' }
+      error: { errorCode: 'NOT_A_CODE', message: 'Oops' },
     });
 
     const mapped = mapHttpError(error);
@@ -29,7 +29,11 @@ describe('mapHttpError', () => {
   it('preserves field errors', () => {
     const error = new HttpErrorResponse({
       status: 400,
-      error: { errorCode: 'VALIDATION_ERROR', message: 'Validation failed', fieldErrors: { name: 'Required' } }
+      error: {
+        errorCode: 'VALIDATION_ERROR',
+        message: 'Validation failed',
+        fieldErrors: { name: 'Required' },
+      },
     });
 
     const mapped = mapHttpError(error);

@@ -22,7 +22,7 @@ export const adminRoutes: Routes = [
       { path: 'settings', component: AdminSettingsPage },
       { path: 'exceptions', component: AdminExceptionsPage },
       { path: 'payroll', component: AdminPayrollPage },
-      { path: 'audit', component: AdminAuditPage }
-    ]
-  }
+      { path: 'audit', component: AdminAuditPage },
+    ],
+  },
 ];

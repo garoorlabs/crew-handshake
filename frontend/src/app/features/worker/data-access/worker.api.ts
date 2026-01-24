@@ -90,47 +90,68 @@ export class WorkerApi {
   private readonly http = inject(HttpClient);
 
   getCrewCall(token: string): Observable<WorkerCrewCallResponse> {
-    return this.http.get<WorkerCrewCallResponse>(`/api/v1/public/worker/crew-calls/by-link/${token}`).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+    return this.http
+      .get<WorkerCrewCallResponse>(`/api/v1/public/worker/crew-calls/by-link/${token}`)
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
-  submitHandshake(token: string, request: WorkerHandshakeRequest): Observable<WorkerCrewCallResponse> {
-    return this.http.post<WorkerCrewCallResponse>(`/api/v1/public/worker/crew-calls/by-link/${token}/handshake`, request).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+  submitHandshake(
+    token: string,
+    request: WorkerHandshakeRequest,
+  ): Observable<WorkerCrewCallResponse> {
+    return this.http
+      .post<WorkerCrewCallResponse>(
+        `/api/v1/public/worker/crew-calls/by-link/${token}/handshake`,
+        request,
+      )
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
-  submitAvailability(token: string, request: WorkerAvailabilityRequest): Observable<WorkerCrewCallResponse> {
-    return this.http.post<WorkerCrewCallResponse>(`/api/v1/public/worker/crew-calls/by-link/${token}/availability`, request).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+  submitAvailability(
+    token: string,
+    request: WorkerAvailabilityRequest,
+  ): Observable<WorkerCrewCallResponse> {
+    return this.http
+      .post<WorkerCrewCallResponse>(
+        `/api/v1/public/worker/crew-calls/by-link/${token}/availability`,
+        request,
+      )
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
   checkIn(token: string): Observable<WorkerCheckInResponse> {
-    return this.http.post<WorkerCheckInResponse>(`/api/v1/public/worker/crew-calls/by-link/${token}/check-in`, {}).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+    return this.http
+      .post<WorkerCheckInResponse>(`/api/v1/public/worker/crew-calls/by-link/${token}/check-in`, {})
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
   checkOut(token: string): Observable<WorkerCheckOutResponse> {
-    return this.http.post<WorkerCheckOutResponse>(`/api/v1/public/worker/crew-calls/by-link/${token}/check-out`, {}).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+    return this.http
+      .post<WorkerCheckOutResponse>(
+        `/api/v1/public/worker/crew-calls/by-link/${token}/check-out`,
+        {},
+      )
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
   getTimecard(token: string, week?: string): Observable<WorkerTimecardResponse> {
-    return this.http.get<WorkerTimecardResponse>(`/api/v1/public/worker/timecard/by-link/${token}`, {
-      params: week ? { week } : {}
-    }).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+    return this.http
+      .get<WorkerTimecardResponse>(`/api/v1/public/worker/timecard/by-link/${token}`, {
+        params: week ? { week } : {},
+      })
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
-  submitReviewRequest(token: string, request: WorkerReviewRequestCreateRequest): Observable<WorkerReviewRequestResponse> {
-    return this.http.post<WorkerReviewRequestResponse>(`/api/v1/public/worker/timecard/by-link/${token}/review-requests`, request).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+  submitReviewRequest(
+    token: string,
+    request: WorkerReviewRequestCreateRequest,
+  ): Observable<WorkerReviewRequestResponse> {
+    return this.http
+      .post<WorkerReviewRequestResponse>(
+        `/api/v1/public/worker/timecard/by-link/${token}/review-requests`,
+        request,
+      )
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 }
 

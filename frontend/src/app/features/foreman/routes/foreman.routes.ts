@@ -16,7 +16,7 @@ export const foremanRoutes: Routes = [
       { path: 'crew-calls', component: ForemanCrewCallsPage },
       { path: 'roll-call', component: ForemanRollCallPage },
       { path: 'exceptions', component: ForemanExceptionsPage },
-      { path: 'time-adjustments', component: ForemanTimeAdjustmentsPage }
-    ]
-  }
+      { path: 'time-adjustments', component: ForemanTimeAdjustmentsPage },
+    ],
+  },
 ];

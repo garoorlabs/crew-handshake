@@ -1,6 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ForemanApi, ApiError, ForemanCrewSummary, TodayBoardResponse } from '../data-access/foreman.api';
+import {
+  ForemanApi,
+  ApiError,
+  ForemanCrewSummary,
+  TodayBoardResponse,
+} from '../data-access/foreman.api';
 import { PageHeaderComponent } from '../../../shared/ui/page-header/page-header.component';
 import { EmptyStateComponent } from '../../../shared/ui/empty-state/empty-state.component';
 import { LoadingSpinnerComponent } from '../../../shared/ui/loading-spinner/loading-spinner.component';
@@ -8,10 +13,16 @@ import { StatusBadgeComponent } from '../../../shared/ui/status-badge/status-bad
 
 @Component({
   selector: 'app-foreman-today-page',
-  imports: [ReactiveFormsModule, PageHeaderComponent, EmptyStateComponent, LoadingSpinnerComponent, StatusBadgeComponent],
+  imports: [
+    ReactiveFormsModule,
+    PageHeaderComponent,
+    EmptyStateComponent,
+    LoadingSpinnerComponent,
+    StatusBadgeComponent,
+  ],
   templateUrl: './today.page.html',
   styleUrl: './today.page.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ForemanTodayPage {
   private readonly foremanApi = inject(ForemanApi);
@@ -24,7 +35,7 @@ export class ForemanTodayPage {
 
   readonly filterForm = this.formBuilder.nonNullable.group({
     crewId: ['', [Validators.required]],
-    date: [this.today(), [Validators.required]]
+    date: [this.today(), [Validators.required]],
   });
 
   constructor() {
@@ -47,7 +58,7 @@ export class ForemanTodayPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -67,7 +78,7 @@ export class ForemanTodayPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 

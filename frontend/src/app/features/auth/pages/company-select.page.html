@@ -14,7 +14,10 @@
     <div class="company-loading" role="status" aria-live="polite">Loading companies...</div>
   } @else {
     @if (memberships().length === 0) {
-      <app-empty-state title="No companies available" description="Ask your admin to add your membership."></app-empty-state>
+      <app-empty-state
+        title="No companies available"
+        description="Ask your admin to add your membership."
+      ></app-empty-state>
     } @else {
       <ul class="ds-list" role="list">
         @for (membership of memberships(); track membership.membershipId) {

@@ -1,6 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ForemanApi, ApiError, CrewCallResponse, CrewCallSummaryResponse, ForemanCrewSummary, SiteSummary } from '../data-access/foreman.api';
+import {
+  ForemanApi,
+  ApiError,
+  CrewCallResponse,
+  CrewCallSummaryResponse,
+  ForemanCrewSummary,
+  SiteSummary,
+} from '../data-access/foreman.api';
 import { EmptyStateComponent } from '../../../shared/ui/empty-state/empty-state.component';
 import { PageHeaderComponent } from '../../../shared/ui/page-header/page-header.component';
 import { LoadingSpinnerComponent } from '../../../shared/ui/loading-spinner/loading-spinner.component';
@@ -8,10 +15,16 @@ import { StatusBadgeComponent } from '../../../shared/ui/status-badge/status-bad
 
 @Component({
   selector: 'app-foreman-crew-calls-page',
-  imports: [ReactiveFormsModule, EmptyStateComponent, PageHeaderComponent, LoadingSpinnerComponent, StatusBadgeComponent],
+  imports: [
+    ReactiveFormsModule,
+    EmptyStateComponent,
+    PageHeaderComponent,
+    LoadingSpinnerComponent,
+    StatusBadgeComponent,
+  ],
   templateUrl: './crew-calls.page.html',
   styleUrl: './crew-calls.page.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ForemanCrewCallsPage {
   private readonly foremanApi = inject(ForemanApi);
@@ -27,14 +40,14 @@ export class ForemanCrewCallsPage {
 
   readonly filterForm = this.formBuilder.nonNullable.group({
     crewId: ['', [Validators.required]],
-    date: [this.today(), [Validators.required]]
+    date: [this.today(), [Validators.required]],
   });
 
   readonly sendForm = this.formBuilder.nonNullable.group({
     crewId: ['', [Validators.required]],
     siteId: ['', [Validators.required]],
     startAt: ['', [Validators.required]],
-    meetPoint: ['', [Validators.required]]
+    meetPoint: ['', [Validators.required]],
   });
 
   readonly isResend = computed(() => !!this.selectedCrewCallId());
@@ -61,11 +74,11 @@ export class ForemanCrewCallsPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
     this.foremanApi.getSites().subscribe({
       next: (sites) => this.sites.set(sites),
-      error: () => {}
+      error: () => {},
     });
   }
 
@@ -85,7 +98,7 @@ export class ForemanCrewCallsPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -94,7 +107,7 @@ export class ForemanCrewCallsPage {
     this.sendForm.patchValue({
       crewId: this.filterForm.controls.crewId.value,
       startAt: call.startAt ? this.toLocalInput(call.startAt) : '',
-      meetPoint: call.meetPoint
+      meetPoint: call.meetPoint,
     });
   }
 
@@ -102,7 +115,7 @@ export class ForemanCrewCallsPage {
     this.selectedCrewCallId.set(null);
     this.sendForm.patchValue({
       startAt: '',
-      meetPoint: ''
+      meetPoint: '',
     });
   }
 
@@ -118,7 +131,7 @@ export class ForemanCrewCallsPage {
       crewId: payload.crewId,
       siteId: payload.siteId,
       startAt: new Date(payload.startAt).toISOString(),
-      meetPoint: payload.meetPoint
+      meetPoint: payload.meetPoint,
     };
 
     if (this.isResend() && this.selectedCrewCallId()) {
@@ -131,7 +144,7 @@ export class ForemanCrewCallsPage {
         error: (error: ApiError) => {
           this.error.set(error);
           this.loading.set(false);
-        }
+        },
       });
       return;
     }
@@ -145,7 +158,7 @@ export class ForemanCrewCallsPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 

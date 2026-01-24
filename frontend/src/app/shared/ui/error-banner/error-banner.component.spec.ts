@@ -7,7 +7,7 @@ describe('ErrorBannerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ErrorBannerComponent]
+      imports: [ErrorBannerComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ErrorBannerComponent);

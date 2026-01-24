@@ -10,7 +10,10 @@
     </div>
   } @else {
     @if (!data() || (data()?.entries?.length ?? 0) === 0) {
-      <app-empty-state title="No time entries" description="Time entries will appear after you check in or your foreman records roll call."></app-empty-state>
+      <app-empty-state
+        title="No time entries"
+        description="Time entries will appear after you check in or your foreman records roll call."
+      ></app-empty-state>
     } @else {
       <section class="worker-card ds-card">
         <h1 class="worker-title">My hours</h1>
@@ -24,7 +27,8 @@
               <div>
                 <div class="worker-name">{{ entry.workDate }} - {{ entry.siteName }}</div>
                 <div class="worker-meta">
-                  Check-in: {{ entry.checkInAt || 'N/A' }} - Check-out: {{ entry.checkOutAt || 'N/A' }}
+                  Check-in: {{ entry.checkInAt || 'N/A' }} - Check-out:
+                  {{ entry.checkOutAt || 'N/A' }}
                 </div>
                 @if (entry.edited) {
                   <span class="ds-chip">Edited</span>
@@ -33,7 +37,11 @@
               <app-status-badge [tone]="'info'" [label]="entry.status"></app-status-badge>
             </div>
             <div class="ds-inline-actions">
-              <button class="ds-button ds-button--secondary" type="button" (click)="selectEntry(entry)">
+              <button
+                class="ds-button ds-button--secondary"
+                type="button"
+                (click)="selectEntry(entry)"
+              >
                 Request review
               </button>
             </div>
@@ -50,8 +58,12 @@
               id="review-reason"
               class="ds-select"
               formControlName="reason"
-              [class.ds-select--error]="reviewForm.controls.reason.touched && reviewForm.controls.reason.invalid"
-              [attr.aria-invalid]="reviewForm.controls.reason.touched && reviewForm.controls.reason.invalid"
+              [class.ds-select--error]="
+                reviewForm.controls.reason.touched && reviewForm.controls.reason.invalid
+              "
+              [attr.aria-invalid]="
+                reviewForm.controls.reason.touched && reviewForm.controls.reason.invalid
+              "
               aria-describedby="review-reason-error"
             >
               <option value="">Select reason</option>
@@ -60,7 +72,9 @@
               <option value="Other">Other</option>
             </select>
             @if (reviewForm.controls.reason.touched && reviewForm.controls.reason.invalid) {
-              <p id="review-reason-error" class="ds-error-text" role="status">Reason is required.</p>
+              <p id="review-reason-error" class="ds-error-text" role="status">
+                Reason is required.
+              </p>
             }
           </div>
           <div class="ds-field">
@@ -68,10 +82,18 @@
             <textarea id="review-note" class="ds-textarea" formControlName="note"></textarea>
           </div>
           <div class="ds-inline-actions">
-            <button class="ds-button ds-button--primary" type="submit" [disabled]="!canSubmitReview() || loading()">
+            <button
+              class="ds-button ds-button--primary"
+              type="submit"
+              [disabled]="!canSubmitReview() || loading()"
+            >
               Submit request
             </button>
-            <button class="ds-button ds-button--ghost" type="button" (click)="selectedEntry.set(null)">
+            <button
+              class="ds-button ds-button--ghost"
+              type="button"
+              (click)="selectedEntry.set(null)"
+            >
               Cancel
             </button>
           </div>

@@ -10,7 +10,7 @@ export const authRoutes: Routes = [
     children: [
       { path: 'login', component: AuthLoginPage },
       { path: 'company', component: AuthCompanySelectPage },
-      { path: '', redirectTo: 'login', pathMatch: 'full' }
-    ]
-  }
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
+    ],
+  },
 ];

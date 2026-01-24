@@ -1,5 +1,12 @@
 <app-page-header title="Today" subtitle="View confirmations and attendance for your crew.">
-  <button class="ds-button ds-button--secondary" type="button" (click)="loadBoard()" [disabled]="loading()">Refresh</button>
+  <button
+    class="ds-button ds-button--secondary"
+    type="button"
+    (click)="loadBoard()"
+    [disabled]="loading()"
+  >
+    Refresh
+  </button>
 </app-page-header>
 
 <section class="ds-stack">
@@ -32,7 +39,10 @@
     </div>
   } @else {
     @if (!board() || board()?.workers?.length === 0) {
-      <app-empty-state title="No roster loaded" description="Select a crew to view today's roster."></app-empty-state>
+      <app-empty-state
+        title="No roster loaded"
+        description="Select a crew to view today's roster."
+      ></app-empty-state>
     } @else {
       <div class="ds-card">
         <div class="summary-row">

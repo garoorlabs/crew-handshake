@@ -8,7 +8,7 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './worker-shell.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'ds-layout-worker'
-  }
+    class: 'ds-layout-worker',
+  },
 })
 export class WorkerShellComponent {}

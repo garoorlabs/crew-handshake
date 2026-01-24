@@ -8,7 +8,7 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './auth-shell.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'ds-layout-foreman'
-  }
+    class: 'ds-layout-foreman',
+  },
 })
 export class AuthShellPage {}

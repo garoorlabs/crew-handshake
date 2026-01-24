@@ -1,5 +1,12 @@
 <app-page-header title="Payroll" subtitle="Review readiness and export CSV.">
-  <button class="ds-button ds-button--secondary" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+  <button
+    class="ds-button ds-button--secondary"
+    type="button"
+    (click)="load()"
+    [disabled]="loading()"
+  >
+    Refresh
+  </button>
 </app-page-header>
 
 <section class="ds-stack">
@@ -23,7 +30,9 @@
         <div class="summary-row">
           <div>
             <div class="summary-label">Period</div>
-            <div class="summary-value">{{ summary()?.periodStart }} to {{ summary()?.periodEnd }}</div>
+            <div class="summary-value">
+              {{ summary()?.periodStart }} to {{ summary()?.periodEnd }}
+            </div>
           </div>
           <div>
             <div class="summary-label">Entries</div>
@@ -34,7 +43,12 @@
             <div class="summary-value">{{ summary()?.unresolvedExceptions }}</div>
           </div>
         </div>
-        <button class="ds-button ds-button--primary" type="button" (click)="onExport()" [disabled]="exporting()">
+        <button
+          class="ds-button ds-button--primary"
+          type="button"
+          (click)="onExport()"
+          [disabled]="exporting()"
+        >
           {{ exporting() ? 'Exporting...' : 'Export CSV' }}
         </button>
       </div>

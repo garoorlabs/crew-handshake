@@ -9,10 +9,16 @@ import { StatusBadgeComponent } from '../../../shared/ui/status-badge/status-bad
 
 @Component({
   selector: 'app-admin-workers-page',
-  imports: [ReactiveFormsModule, EmptyStateComponent, PageHeaderComponent, LoadingSpinnerComponent, StatusBadgeComponent],
+  imports: [
+    ReactiveFormsModule,
+    EmptyStateComponent,
+    PageHeaderComponent,
+    LoadingSpinnerComponent,
+    StatusBadgeComponent,
+  ],
   templateUrl: './workers.page.html',
   styleUrl: './workers.page.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminWorkersPage {
   private readonly adminApi = inject(AdminApi);
@@ -29,7 +35,7 @@ export class AdminWorkersPage {
     phone: ['', [Validators.required]],
     preferredLanguage: ['en'],
     crewId: [''],
-    active: [true]
+    active: [true],
   });
 
   readonly isEditing = computed(() => !!this.editingId());
@@ -45,7 +51,7 @@ export class AdminWorkersPage {
     this.error.set(null);
     forkJoin({
       workers: this.adminApi.getWorkers(),
-      crews: this.adminApi.getCrews()
+      crews: this.adminApi.getCrews(),
     }).subscribe({
       next: ({ workers, crews }) => {
         this.workers.set(workers);
@@ -55,7 +61,7 @@ export class AdminWorkersPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -66,7 +72,7 @@ export class AdminWorkersPage {
       phone: worker.phoneE164,
       preferredLanguage: worker.preferredLanguage,
       crewId: worker.crewId ?? '',
-      active: worker.active
+      active: worker.active,
     });
     this.form.controls.phone.disable();
   }
@@ -78,7 +84,7 @@ export class AdminWorkersPage {
       phone: '',
       preferredLanguage: 'en',
       crewId: '',
-      active: true
+      active: true,
     });
     this.form.controls.phone.enable();
   }
@@ -94,13 +100,36 @@ export class AdminWorkersPage {
     const crewId = payload.crewId ? payload.crewId : null;
 
     if (this.isEditing() && this.editingId()) {
-      this.adminApi.updateWorker({
-        membershipId: this.editingId()!,
+      this.adminApi
+        .updateWorker({
+          membershipId: this.editingId()!,
+          displayName: payload.displayName,
+          preferredLanguage: payload.preferredLanguage,
+          crewId,
+          active: payload.active,
+        })
+        .subscribe({
+          next: () => {
+            this.onCancelEdit();
+            this.load();
+          },
+          error: (error: ApiError) => {
+            this.error.set(error);
+            this.loading.set(false);
+          },
+        });
+      return;
+    }
+
+    this.adminApi
+      .createWorker({
         displayName: payload.displayName,
+        phone: payload.phone,
         preferredLanguage: payload.preferredLanguage,
         crewId,
-        active: payload.active
-      }).subscribe({
+        active: payload.active,
+      })
+      .subscribe({
         next: () => {
           this.onCancelEdit();
           this.load();
@@ -108,27 +137,8 @@ export class AdminWorkersPage {
         error: (error: ApiError) => {
           this.error.set(error);
           this.loading.set(false);
-        }
+        },
       });
-      return;
-    }
-
-    this.adminApi.createWorker({
-      displayName: payload.displayName,
-      phone: payload.phone,
-      preferredLanguage: payload.preferredLanguage,
-      crewId,
-      active: payload.active
-    }).subscribe({
-      next: () => {
-        this.onCancelEdit();
-        this.load();
-      },
-      error: (error: ApiError) => {
-        this.error.set(error);
-        this.loading.set(false);
-      }
-    });
   }
 
   trackById(index: number, worker: WorkerResponse): string {

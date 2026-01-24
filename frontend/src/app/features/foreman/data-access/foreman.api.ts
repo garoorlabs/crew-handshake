@@ -146,69 +146,72 @@ export class ForemanApi {
   private readonly http = inject(HttpClient);
 
   getCrews(): Observable<ForemanCrewSummary[]> {
-    return this.http.get<ForemanCrewSummary[]>('/api/v1/foreman/crews').pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+    return this.http
+      .get<ForemanCrewSummary[]>('/api/v1/foreman/crews')
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
   getSites(): Observable<SiteSummary[]> {
-    return this.http.get<SiteSummary[]>('/api/v1/foreman/sites').pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+    return this.http
+      .get<SiteSummary[]>('/api/v1/foreman/sites')
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
   getCrewCalls(date: string, crewId: string): Observable<CrewCallSummaryResponse[]> {
-    return this.http.get<CrewCallSummaryResponse[]>('/api/v1/foreman/crew-calls', { params: { date, crewId } }).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+    return this.http
+      .get<CrewCallSummaryResponse[]>('/api/v1/foreman/crew-calls', { params: { date, crewId } })
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
   createCrewCall(request: CrewCallCreateRequest): Observable<CrewCallResponse> {
-    return this.http.post<CrewCallResponse>('/api/v1/foreman/crew-calls', request).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+    return this.http
+      .post<CrewCallResponse>('/api/v1/foreman/crew-calls', request)
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
   resendCrewCall(crewCallId: string, request: CrewCallUpdateRequest): Observable<CrewCallResponse> {
-    return this.http.post<CrewCallResponse>(`/api/v1/foreman/crew-calls/${crewCallId}/resend`, request).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+    return this.http
+      .post<CrewCallResponse>(`/api/v1/foreman/crew-calls/${crewCallId}/resend`, request)
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
   getToday(date: string, crewId: string): Observable<TodayBoardResponse> {
-    return this.http.get<TodayBoardResponse>('/api/v1/foreman/today', { params: { date, crewId } }).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+    return this.http
+      .get<TodayBoardResponse>('/api/v1/foreman/today', { params: { date, crewId } })
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
   submitRollCall(request: RollCallRequest): Observable<RollCallResponse> {
-    return this.http.post<RollCallResponse>('/api/v1/foreman/roll-call', request).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+    return this.http
+      .post<RollCallResponse>('/api/v1/foreman/roll-call', request)
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
   getExceptions(date: string, crewId: string): Observable<ExceptionResponse[]> {
-    return this.http.get<ExceptionResponse[]>('/api/v1/foreman/exceptions', { params: { date, crewId } }).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+    return this.http
+      .get<ExceptionResponse[]>('/api/v1/foreman/exceptions', { params: { date, crewId } })
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
-  resolveException(exceptionId: string, request: ExceptionResolveRequest): Observable<ExceptionResponse> {
-    return this.http.post<ExceptionResponse>(`/api/v1/foreman/exceptions/${exceptionId}/resolve`, request).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+  resolveException(
+    exceptionId: string,
+    request: ExceptionResolveRequest,
+  ): Observable<ExceptionResponse> {
+    return this.http
+      .post<ExceptionResponse>(`/api/v1/foreman/exceptions/${exceptionId}/resolve`, request)
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
   adjustTime(request: TimeAdjustmentRequest): Observable<TimeAdjustmentResponse> {
-    return this.http.post<TimeAdjustmentResponse>('/api/v1/foreman/time-adjustments', request).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+    return this.http
+      .post<TimeAdjustmentResponse>('/api/v1/foreman/time-adjustments', request)
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
   sendRecipientOverride(request: RecipientOverrideRequest): Observable<CrewCallRecipientStatus> {
-    return this.http.post<CrewCallRecipientStatus>('/api/v1/foreman/recipient-overrides', request).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+    return this.http
+      .post<CrewCallRecipientStatus>('/api/v1/foreman/recipient-overrides', request)
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 }
 

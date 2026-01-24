@@ -1,7 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { forkJoin } from 'rxjs';
-import { AdminApi, ApiError, CrewResponse, ForemanResponse, WorkerResponse } from '../data-access/admin.api';
+import {
+  AdminApi,
+  ApiError,
+  CrewResponse,
+  ForemanResponse,
+  WorkerResponse,
+} from '../data-access/admin.api';
 import { EmptyStateComponent } from '../../../shared/ui/empty-state/empty-state.component';
 import { PageHeaderComponent } from '../../../shared/ui/page-header/page-header.component';
 import { LoadingSpinnerComponent } from '../../../shared/ui/loading-spinner/loading-spinner.component';
@@ -11,7 +17,7 @@ import { LoadingSpinnerComponent } from '../../../shared/ui/loading-spinner/load
   imports: [ReactiveFormsModule, EmptyStateComponent, PageHeaderComponent, LoadingSpinnerComponent],
   templateUrl: './crews.page.html',
   styleUrl: './crews.page.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminCrewsPage {
   private readonly adminApi = inject(AdminApi);
@@ -27,7 +33,7 @@ export class AdminCrewsPage {
 
   readonly form = this.formBuilder.nonNullable.group({
     name: ['', [Validators.required]],
-    foremanMembershipId: ['', [Validators.required]]
+    foremanMembershipId: ['', [Validators.required]],
   });
 
   readonly isEditing = computed(() => !!this.editingId());
@@ -45,7 +51,7 @@ export class AdminCrewsPage {
     forkJoin({
       crews: this.adminApi.getCrews(),
       foremen: this.adminApi.getForemen(),
-      workers: this.adminApi.getWorkers()
+      workers: this.adminApi.getWorkers(),
     }).subscribe({
       next: ({ crews, foremen, workers }) => {
         this.crews.set(crews);
@@ -56,7 +62,7 @@ export class AdminCrewsPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -74,7 +80,7 @@ export class AdminCrewsPage {
     this.editingId.set(crew.crewId);
     this.form.reset({
       name: crew.name,
-      foremanMembershipId: crew.foremanMembershipId
+      foremanMembershipId: crew.foremanMembershipId,
     });
     const next = new Set<string>();
     crew.workers.forEach((worker) => next.add(worker.membershipId));
@@ -85,7 +91,7 @@ export class AdminCrewsPage {
     this.editingId.set(null);
     this.form.reset({
       name: '',
-      foremanMembershipId: ''
+      foremanMembershipId: '',
     });
     this.selectedWorkerIds.set(new Set());
   }
@@ -101,12 +107,33 @@ export class AdminCrewsPage {
     const workerIds = Array.from(this.selectedWorkerIds());
 
     if (this.isEditing() && this.editingId()) {
-      this.adminApi.updateCrew({
-        crewId: this.editingId()!,
+      this.adminApi
+        .updateCrew({
+          crewId: this.editingId()!,
+          name: payload.name,
+          foremanMembershipId: payload.foremanMembershipId,
+          workerMembershipIds: workerIds,
+        })
+        .subscribe({
+          next: () => {
+            this.onCancelEdit();
+            this.load();
+          },
+          error: (error: ApiError) => {
+            this.error.set(error);
+            this.loading.set(false);
+          },
+        });
+      return;
+    }
+
+    this.adminApi
+      .createCrew({
         name: payload.name,
         foremanMembershipId: payload.foremanMembershipId,
-        workerMembershipIds: workerIds
-      }).subscribe({
+        workerMembershipIds: workerIds,
+      })
+      .subscribe({
         next: () => {
           this.onCancelEdit();
           this.load();
@@ -114,25 +141,8 @@ export class AdminCrewsPage {
         error: (error: ApiError) => {
           this.error.set(error);
           this.loading.set(false);
-        }
+        },
       });
-      return;
-    }
-
-    this.adminApi.createCrew({
-      name: payload.name,
-      foremanMembershipId: payload.foremanMembershipId,
-      workerMembershipIds: workerIds
-    }).subscribe({
-      next: () => {
-        this.onCancelEdit();
-        this.load();
-      },
-      error: (error: ApiError) => {
-        this.error.set(error);
-        this.loading.set(false);
-      }
-    });
   }
 
   trackCrew(index: number, crew: CrewResponse): string {

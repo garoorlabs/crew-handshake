@@ -9,8 +9,8 @@ import { AuthSessionService } from '../../auth/auth-session.service';
   styleUrl: './foreman-shell.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'ds-layout-foreman'
-  }
+    class: 'ds-layout-foreman',
+  },
 })
 export class ForemanShellComponent {
   private readonly session = inject(AuthSessionService);
@@ -23,7 +23,7 @@ export class ForemanShellComponent {
       },
       error: () => {
         this.router.navigate(['/auth']);
-      }
+      },
     });
   }
 

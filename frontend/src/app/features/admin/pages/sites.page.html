@@ -1,5 +1,12 @@
 <app-page-header title="Sites" subtitle="Keep job sites and addresses current.">
-  <button class="ds-button ds-button--secondary" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+  <button
+    class="ds-button ds-button--secondary"
+    type="button"
+    (click)="load()"
+    [disabled]="loading()"
+  >
+    Refresh
+  </button>
 </app-page-header>
 
 <section class="ds-stack">
@@ -41,7 +48,12 @@
         {{ submitLabel() }}
       </button>
       @if (isEditing()) {
-        <button class="ds-button ds-button--ghost" type="button" (click)="onCancelEdit()" [disabled]="loading()">
+        <button
+          class="ds-button ds-button--ghost"
+          type="button"
+          (click)="onCancelEdit()"
+          [disabled]="loading()"
+        >
           Cancel
         </button>
       }
@@ -60,7 +72,10 @@
     </div>
   } @else {
     @if (sites().length === 0) {
-      <app-empty-state title="No sites yet" description="Add job sites so foremen can send crew calls."></app-empty-state>
+      <app-empty-state
+        title="No sites yet"
+        description="Add job sites so foremen can send crew calls."
+      ></app-empty-state>
     } @else {
       <div class="ds-table-wrap">
         <table class="ds-table" aria-label="Sites">

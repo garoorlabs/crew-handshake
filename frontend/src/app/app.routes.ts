@@ -7,28 +7,30 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'a'
+    redirectTo: 'a',
   },
   {
     path: 'a',
     canActivate: [authGuard, activeCompanyGuard],
-    loadChildren: () => import('./features/admin/routes/admin.routes').then((m) => m.adminRoutes)
+    loadChildren: () => import('./features/admin/routes/admin.routes').then((m) => m.adminRoutes),
   },
   {
     path: 'f',
     canActivate: [authGuard, activeCompanyGuard],
-    loadChildren: () => import('./features/foreman/routes/foreman.routes').then((m) => m.foremanRoutes)
+    loadChildren: () =>
+      import('./features/foreman/routes/foreman.routes').then((m) => m.foremanRoutes),
   },
   {
     path: 'auth',
-    loadChildren: () => import('./features/auth/routes/auth.routes').then((m) => m.authRoutes)
+    loadChildren: () => import('./features/auth/routes/auth.routes').then((m) => m.authRoutes),
   },
   {
     path: 'w',
-    loadChildren: () => import('./features/worker/routes/worker.routes').then((m) => m.workerRoutes)
+    loadChildren: () =>
+      import('./features/worker/routes/worker.routes').then((m) => m.workerRoutes),
   },
   {
     path: '**',
-    component: NotFoundPage
-  }
+    component: NotFoundPage,
+  },
 ];

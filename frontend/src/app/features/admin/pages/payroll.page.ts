@@ -8,7 +8,7 @@ import { LoadingSpinnerComponent } from '../../../shared/ui/loading-spinner/load
   imports: [PageHeaderComponent, LoadingSpinnerComponent],
   templateUrl: './payroll.page.html',
   styleUrl: './payroll.page.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminPayrollPage {
   private readonly adminApi = inject(AdminApi);
@@ -33,7 +33,7 @@ export class AdminPayrollPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -56,7 +56,7 @@ export class AdminPayrollPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.exporting.set(false);
-      }
+      },
     });
   }
 }

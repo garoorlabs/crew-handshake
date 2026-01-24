@@ -8,7 +8,7 @@ import { EmptyStateComponent } from '../../../shared/ui/empty-state/empty-state.
   imports: [EmptyStateComponent],
   templateUrl: './company-select.page.html',
   styleUrl: './company-select.page.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthCompanySelectPage implements OnInit {
   private readonly session = inject(AuthSessionService);
@@ -28,7 +28,7 @@ export class AuthCompanySelectPage implements OnInit {
       },
       error: () => {
         this.router.navigate(['/auth/login']);
-      }
+      },
     });
   }
 
@@ -37,7 +37,7 @@ export class AuthCompanySelectPage implements OnInit {
       next: () => {
         this.router.navigate([this.session.getDefaultRoute()]);
       },
-      error: () => {}
+      error: () => {},
     });
   }
 }

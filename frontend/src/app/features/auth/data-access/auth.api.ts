@@ -35,45 +35,45 @@ export class AuthApi {
   private readonly http = inject(HttpClient);
 
   startOtp(phone: string): Observable<OtpStartResponse> {
-    return this.http.post<OtpStartResponse>('/api/v1/auth/otp/start', { phone }).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+    return this.http
+      .post<OtpStartResponse>('/api/v1/auth/otp/start', { phone })
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
   verifyOtp(phone: string, code: string): Observable<MeResponse> {
-    return this.http.post<MeResponse>('/api/v1/auth/otp/verify', { phone, code }).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+    return this.http
+      .post<MeResponse>('/api/v1/auth/otp/verify', { phone, code })
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
   getMe(): Observable<MeResponse> {
-    return this.http.get<MeResponse>('/api/v1/me').pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+    return this.http
+      .get<MeResponse>('/api/v1/me')
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
   setActiveCompany(companyId: string): Observable<MeResponse> {
-    return this.http.post<MeResponse>('/api/v1/me/active-company', { companyId }).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+    return this.http
+      .post<MeResponse>('/api/v1/me/active-company', { companyId })
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
   logout(): Observable<void> {
-    return this.http.post<void>('/api/v1/auth/logout', {}).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+    return this.http
+      .post<void>('/api/v1/auth/logout', {})
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
   devLogin(phone: string): Observable<MeResponse> {
-    return this.http.post<MeResponse>('/api/v1/auth/dev/login', { phone }).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+    return this.http
+      .post<MeResponse>('/api/v1/auth/dev/login', { phone })
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 
   devWorkerLink(): Observable<DevWorkerLinkResponse> {
-    return this.http.post<DevWorkerLinkResponse>('/api/v1/auth/dev/worker-link', {}).pipe(
-      catchError((error) => throwError(() => mapHttpError(error)))
-    );
+    return this.http
+      .post<DevWorkerLinkResponse>('/api/v1/auth/dev/worker-link', {})
+      .pipe(catchError((error) => throwError(() => mapHttpError(error))));
   }
 }
 

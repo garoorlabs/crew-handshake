@@ -8,10 +8,16 @@ import { StatusBadgeComponent } from '../../../shared/ui/status-badge/status-bad
 
 @Component({
   selector: 'app-admin-sites-page',
-  imports: [ReactiveFormsModule, EmptyStateComponent, PageHeaderComponent, LoadingSpinnerComponent, StatusBadgeComponent],
+  imports: [
+    ReactiveFormsModule,
+    EmptyStateComponent,
+    PageHeaderComponent,
+    LoadingSpinnerComponent,
+    StatusBadgeComponent,
+  ],
   templateUrl: './sites.page.html',
   styleUrl: './sites.page.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminSitesPage {
   private readonly adminApi = inject(AdminApi);
@@ -26,7 +32,7 @@ export class AdminSitesPage {
     name: ['', [Validators.required]],
     address: [''],
     notes: [''],
-    active: [true]
+    active: [true],
   });
 
   readonly isEditing = computed(() => !!this.editingId());
@@ -48,7 +54,7 @@ export class AdminSitesPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -58,7 +64,7 @@ export class AdminSitesPage {
       name: site.name,
       address: site.address ?? '',
       notes: site.notes ?? '',
-      active: site.active
+      active: site.active,
     });
   }
 
@@ -68,7 +74,7 @@ export class AdminSitesPage {
       name: '',
       address: '',
       notes: '',
-      active: true
+      active: true,
     });
   }
 
@@ -82,13 +88,35 @@ export class AdminSitesPage {
     const payload = this.form.getRawValue();
 
     if (this.isEditing() && this.editingId()) {
-      this.adminApi.updateSite({
-        siteId: this.editingId()!,
+      this.adminApi
+        .updateSite({
+          siteId: this.editingId()!,
+          name: payload.name,
+          address: payload.address,
+          notes: payload.notes,
+          active: payload.active,
+        })
+        .subscribe({
+          next: () => {
+            this.onCancelEdit();
+            this.load();
+          },
+          error: (error: ApiError) => {
+            this.error.set(error);
+            this.loading.set(false);
+          },
+        });
+      return;
+    }
+
+    this.adminApi
+      .createSite({
         name: payload.name,
         address: payload.address,
         notes: payload.notes,
-        active: payload.active
-      }).subscribe({
+        active: payload.active,
+      })
+      .subscribe({
         next: () => {
           this.onCancelEdit();
           this.load();
@@ -96,26 +124,8 @@ export class AdminSitesPage {
         error: (error: ApiError) => {
           this.error.set(error);
           this.loading.set(false);
-        }
+        },
       });
-      return;
-    }
-
-    this.adminApi.createSite({
-      name: payload.name,
-      address: payload.address,
-      notes: payload.notes,
-      active: payload.active
-    }).subscribe({
-      next: () => {
-        this.onCancelEdit();
-        this.load();
-      },
-      error: (error: ApiError) => {
-        this.error.set(error);
-        this.loading.set(false);
-      }
-    });
   }
 
   trackById(index: number, site: SiteResponse): string {

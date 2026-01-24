@@ -8,10 +8,16 @@ import { StatusBadgeComponent } from '../../../shared/ui/status-badge/status-bad
 
 @Component({
   selector: 'app-admin-exceptions-page',
-  imports: [ReactiveFormsModule, EmptyStateComponent, PageHeaderComponent, LoadingSpinnerComponent, StatusBadgeComponent],
+  imports: [
+    ReactiveFormsModule,
+    EmptyStateComponent,
+    PageHeaderComponent,
+    LoadingSpinnerComponent,
+    StatusBadgeComponent,
+  ],
   templateUrl: './exceptions.page.html',
   styleUrl: './exceptions.page.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminExceptionsPage {
   private readonly adminApi = inject(AdminApi);
@@ -24,7 +30,7 @@ export class AdminExceptionsPage {
 
   readonly filterForm = this.formBuilder.nonNullable.group({
     crewId: ['', [Validators.required]],
-    date: [this.today(), [Validators.required]]
+    date: [this.today(), [Validators.required]],
   });
 
   readonly resolveForm = this.formBuilder.nonNullable.group({
@@ -33,7 +39,7 @@ export class AdminExceptionsPage {
     checkInAt: [''],
     checkOutAt: [''],
     reason: [''],
-    note: ['']
+    note: [''],
   });
 
   readonly selectedException = computed(() => {
@@ -61,7 +67,7 @@ export class AdminExceptionsPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -84,7 +90,7 @@ export class AdminExceptionsPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -99,7 +105,7 @@ export class AdminExceptionsPage {
       checkInAt: payload.checkInAt ? this.toIso(payload.checkInAt) : null,
       checkOutAt: payload.checkOutAt ? this.toIso(payload.checkOutAt) : null,
       reason: payload.reason || null,
-      note: payload.note || null
+      note: payload.note || null,
     };
     this.loading.set(true);
     this.error.set(null);
@@ -110,7 +116,7 @@ export class AdminExceptionsPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 

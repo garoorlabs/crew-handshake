@@ -6,7 +6,7 @@ describe('FieldErrorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FieldErrorComponent]
+      imports: [FieldErrorComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(FieldErrorComponent);

@@ -9,7 +9,7 @@ import { ApiError, AuthApi, MeResponse } from '../data-access/auth.api';
   imports: [ReactiveFormsModule],
   templateUrl: './login.page.html',
   styleUrl: './login.page.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthLoginPage {
   private readonly authApi = inject(AuthApi);
@@ -23,11 +23,11 @@ export class AuthLoginPage {
   readonly phoneValue = signal('');
 
   readonly phoneForm = this.formBuilder.nonNullable.group({
-    phone: ['', [Validators.required]]
+    phone: ['', [Validators.required]],
   });
 
   readonly codeForm = this.formBuilder.nonNullable.group({
-    code: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]]
+    code: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
   });
 
   readonly isPhoneInvalid = computed(() => {
@@ -42,12 +42,12 @@ export class AuthLoginPage {
 
   readonly phoneServerError = computed(() => {
     const error = this.error();
-    return error?.category === 'Validation' ? error.fieldErrors?.['phone'] ?? null : null;
+    return error?.category === 'Validation' ? (error.fieldErrors?.['phone'] ?? null) : null;
   });
 
   readonly codeServerError = computed(() => {
     const error = this.error();
-    return error?.category === 'Validation' ? error.fieldErrors?.['code'] ?? null : null;
+    return error?.category === 'Validation' ? (error.fieldErrors?.['code'] ?? null) : null;
   });
 
   readonly showTopError = computed(() => {
@@ -73,16 +73,16 @@ export class AuthLoginPage {
   readonly isCodeInvalidState = computed(() => this.isCodeInvalid() || !!this.codeServerError());
 
   readonly phoneDescribedBy = computed(() =>
-    this.isPhoneInvalidState() ? 'phone-help phone-error' : 'phone-help'
+    this.isPhoneInvalidState() ? 'phone-help phone-error' : 'phone-help',
   );
 
   readonly codeDescribedBy = computed(() =>
-    this.isCodeInvalidState() ? 'code-help code-error' : 'code-help'
+    this.isCodeInvalidState() ? 'code-help code-error' : 'code-help',
   );
 
   private readonly demoPhones = {
     admin: '+14155550100',
-    foreman: '+14155550101'
+    foreman: '+14155550101',
   };
 
   onSendCode(): void {
@@ -102,7 +102,7 @@ export class AuthLoginPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -122,7 +122,7 @@ export class AuthLoginPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -137,7 +137,7 @@ export class AuthLoginPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -152,7 +152,7 @@ export class AuthLoginPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -176,7 +176,7 @@ export class AuthLoginPage {
       error: (error: ApiError) => {
         this.error.set(error);
         this.loading.set(false);
-      }
+      },
     });
   }
 }
