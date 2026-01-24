@@ -12,9 +12,16 @@
 *.log
 *.err
 
+# Temp
+.tmp/
+
 # IDEs and editors
 .idea/
 .vscode/
 .project
 .classpath
 .settings/
+
+# OS files
+.DS_Store
+Thumbs.db
