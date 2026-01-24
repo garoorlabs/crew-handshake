@@ -1,0 +1,12 @@
+.ds-spinner {
+  width: var(--ds-space-8);
+  height: var(--ds-space-8);
+  border-radius: 50%;
+  border: 1px solid var(--ds-color-border);
+  border-top-color: var(--ds-color-primary);
+  animation: ds-spin 1s linear infinite;
+}
+
+@keyframes ds-spin {
+  to { transform: rotate(360deg); }
+}

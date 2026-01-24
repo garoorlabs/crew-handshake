@@ -1,0 +1,124 @@
+<app-page-header title="Workers" subtitle="Manage worker profiles and crew assignments.">
+  <button class="ds-button ds-button--secondary" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+</app-page-header>
+
+<section class="ds-stack">
+  <form class="ds-card ds-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <h2 class="section-title">{{ formTitle() }}</h2>
+    <div class="ds-field">
+      <label class="ds-label" for="worker-name">Full name</label>
+      <input
+        id="worker-name"
+        class="ds-input"
+        type="text"
+        formControlName="displayName"
+        [class.ds-input--error]="form.controls.displayName.touched && form.controls.displayName.invalid"
+        aria-describedby="worker-name-error"
+        [attr.aria-invalid]="form.controls.displayName.touched && form.controls.displayName.invalid"
+      />
+      @if (form.controls.displayName.touched && form.controls.displayName.invalid) {
+        <p id="worker-name-error" class="ds-error-text" role="status">Name is required.</p>
+      }
+    </div>
+
+    @if (!isEditing()) {
+      <div class="ds-field">
+        <label class="ds-label" for="worker-phone">Phone number</label>
+        <input
+          id="worker-phone"
+          class="ds-input"
+          type="tel"
+          formControlName="phone"
+          autocomplete="tel"
+          [class.ds-input--error]="form.controls.phone.touched && form.controls.phone.invalid"
+          aria-describedby="worker-phone-error"
+          [attr.aria-invalid]="form.controls.phone.touched && form.controls.phone.invalid"
+        />
+        @if (form.controls.phone.touched && form.controls.phone.invalid) {
+          <p id="worker-phone-error" class="ds-error-text" role="status">Phone is required.</p>
+        }
+      </div>
+    }
+
+    <div class="ds-field">
+      <label class="ds-label" for="worker-language">Preferred language</label>
+      <input id="worker-language" class="ds-input" type="text" formControlName="preferredLanguage" />
+    </div>
+
+    <div class="ds-field">
+      <label class="ds-label" for="worker-crew">Crew</label>
+      <select id="worker-crew" class="ds-select" formControlName="crewId">
+        <option value="">Unassigned</option>
+        @for (crew of crews(); track crew.crewId) {
+          <option [value]="crew.crewId">{{ crew.name }}</option>
+        }
+      </select>
+    </div>
+
+    <label class="ds-field checkbox-field">
+      <span class="ds-label">Active</span>
+      <input type="checkbox" formControlName="active" />
+    </label>
+
+    <div class="ds-inline-actions">
+      <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">
+        {{ submitLabel() }}
+      </button>
+      @if (isEditing()) {
+        <button class="ds-button ds-button--ghost" type="button" (click)="onCancelEdit()" [disabled]="loading()">
+          Cancel
+        </button>
+      }
+    </div>
+  </form>
+
+  @if (error()) {
+    <div class="ds-alert ds-alert--error" role="status" aria-live="polite">
+      {{ error()?.message }}
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading-wrap">
+      <app-loading-spinner label="Loading workers"></app-loading-spinner>
+    </div>
+  } @else {
+    @if (workers().length === 0) {
+      <app-empty-state title="No workers yet" description="Add a worker to start building your roster."></app-empty-state>
+    } @else {
+      <div class="ds-table-wrap">
+        <table class="ds-table" aria-label="Workers">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Crew</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (worker of workers(); track trackById($index, worker)) {
+              <tr>
+                <td>{{ worker.displayName }}</td>
+                <td>{{ worker.phoneE164 }}</td>
+                <td>{{ worker.crewName || 'Unassigned' }}</td>
+                <td>
+                  <app-status-badge
+                    [tone]="worker.active ? 'success' : 'warning'"
+                    [label]="worker.active ? 'Active' : 'Inactive'"
+                  ></app-status-badge>
+                </td>
+                <td>
+                  <button class="ds-button ds-button--ghost" type="button" (click)="onEdit(worker)">
+                    Edit
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</section>

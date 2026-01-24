@@ -1,0 +1,14 @@
+<button
+  class="ds-button"
+  [class.ds-button--primary]="variant() === 'primary'"
+  [class.ds-button--secondary]="variant() === 'secondary'"
+  [class.ds-button--ghost]="variant() === 'ghost'"
+  [class.ds-button--destructive]="variant() === 'destructive'"
+  [class.ds-button--full]="fullWidth()"
+  [attr.type]="type()"
+  [disabled]="disabled()"
+  [attr.aria-label]="ariaLabel() || null"
+  (click)="onClick($event)"
+>
+  <ng-content></ng-content>
+</button>

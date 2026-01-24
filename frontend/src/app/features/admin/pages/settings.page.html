@@ -1,0 +1,60 @@
+<app-page-header title="Settings" subtitle="Control dispatch authority and payroll cadence.">
+  <button class="ds-button ds-button--secondary" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+</app-page-header>
+
+<section class="ds-stack">
+  <form class="ds-card ds-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="ds-field">
+      <label class="ds-label" for="settings-language">Default language</label>
+      <input id="settings-language" class="ds-input" type="text" formControlName="defaultLanguage" />
+    </div>
+
+    <div class="ds-field">
+      <label class="ds-label" for="settings-frequency">Payroll frequency</label>
+      <select id="settings-frequency" class="ds-select" formControlName="payrollFrequency">
+        <option value="WEEKLY">Weekly</option>
+        <option value="BIWEEKLY">Biweekly</option>
+      </select>
+    </div>
+
+    <div class="ds-field">
+      <label class="ds-label" for="settings-cutoff">Payroll cutoff day</label>
+      <select id="settings-cutoff" class="ds-select" formControlName="payrollCutoffDay">
+        <option value="MONDAY">Monday</option>
+        <option value="TUESDAY">Tuesday</option>
+        <option value="WEDNESDAY">Wednesday</option>
+        <option value="THURSDAY">Thursday</option>
+        <option value="FRIDAY">Friday</option>
+        <option value="SATURDAY">Saturday</option>
+        <option value="SUNDAY">Sunday</option>
+      </select>
+    </div>
+
+    <div class="ds-field">
+      <label class="ds-label" for="settings-standby">Standby cutoff time (24h)</label>
+      <input id="settings-standby" class="ds-input" type="time" formControlName="standbyCutoffTime" />
+    </div>
+
+    <div class="ds-field">
+      <label class="ds-label" for="settings-dispatch">Dispatch authority</label>
+      <select id="settings-dispatch" class="ds-select" formControlName="dispatchAuthority" [disabled]="true">
+        <option value="HYBRID">Hybrid (Admin + Foreman)</option>
+      </select>
+      <p class="ds-helper">Hybrid is the only supported dispatch authority in v1.</p>
+    </div>
+
+    <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">Save settings</button>
+  </form>
+
+  @if (error()) {
+    <div class="ds-alert ds-alert--error" role="status" aria-live="polite">
+      {{ error()?.message }}
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading-wrap">
+      <app-loading-spinner label="Loading settings"></app-loading-spinner>
+    </div>
+  }
+</section>

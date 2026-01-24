@@ -1,0 +1,114 @@
+<app-page-header title="Crews" subtitle="Assign foremen and roster workers.">
+  <button class="ds-button ds-button--secondary" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+</app-page-header>
+
+<section class="ds-stack">
+  <form class="ds-card ds-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <h2 class="section-title">{{ formTitle() }}</h2>
+    <div class="ds-field">
+      <label class="ds-label" for="crew-name">Crew name</label>
+      <input
+        id="crew-name"
+        class="ds-input"
+        type="text"
+        formControlName="name"
+        [class.ds-input--error]="form.controls.name.touched && form.controls.name.invalid"
+        aria-describedby="crew-name-error"
+        [attr.aria-invalid]="form.controls.name.touched && form.controls.name.invalid"
+      />
+      @if (form.controls.name.touched && form.controls.name.invalid) {
+        <p id="crew-name-error" class="ds-error-text" role="status">Crew name is required.</p>
+      }
+    </div>
+
+    <div class="ds-field">
+      <label class="ds-label" for="crew-foreman">Foreman</label>
+      <select
+        id="crew-foreman"
+        class="ds-select"
+        formControlName="foremanMembershipId"
+        [class.ds-select--error]="form.controls.foremanMembershipId.touched && form.controls.foremanMembershipId.invalid"
+        aria-describedby="crew-foreman-error"
+        [attr.aria-invalid]="form.controls.foremanMembershipId.touched && form.controls.foremanMembershipId.invalid"
+      >
+        <option value="">Select foreman</option>
+        @for (foreman of foremen(); track foreman.membershipId) {
+          <option [value]="foreman.membershipId">{{ foreman.displayName }}</option>
+        }
+      </select>
+      @if (form.controls.foremanMembershipId.touched && form.controls.foremanMembershipId.invalid) {
+        <p id="crew-foreman-error" class="ds-error-text" role="status">Foreman is required.</p>
+      }
+    </div>
+
+    <div class="ds-field">
+      <span class="ds-label">Roster workers</span>
+      <div class="worker-grid">
+        @for (worker of activeWorkers(); track trackWorker($index, worker)) {
+          <label class="worker-option">
+            <input
+              type="checkbox"
+              [checked]="selectedWorkerIds().has(worker.membershipId)"
+              (change)="toggleWorker(worker.membershipId)"
+            />
+            <span>{{ worker.displayName }}</span>
+          </label>
+        }
+      </div>
+    </div>
+
+    <div class="ds-inline-actions">
+      <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">
+        {{ submitLabel() }}
+      </button>
+      @if (isEditing()) {
+        <button class="ds-button ds-button--ghost" type="button" (click)="onCancelEdit()" [disabled]="loading()">
+          Cancel
+        </button>
+      }
+    </div>
+  </form>
+
+  @if (error()) {
+    <div class="ds-alert ds-alert--error" role="status" aria-live="polite">
+      {{ error()?.message }}
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading-wrap">
+      <app-loading-spinner label="Loading crews"></app-loading-spinner>
+    </div>
+  } @else {
+    @if (crews().length === 0) {
+      <app-empty-state title="No crews yet" description="Create a crew and assign its roster."></app-empty-state>
+    } @else {
+      <div class="ds-table-wrap">
+        <table class="ds-table" aria-label="Crews">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Foreman</th>
+              <th>Workers</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (crew of crews(); track trackCrew($index, crew)) {
+              <tr>
+                <td>{{ crew.name }}</td>
+                <td>{{ crew.foremanName }}</td>
+                <td>{{ crew.workerCount }}</td>
+                <td>
+                  <button class="ds-button ds-button--ghost" type="button" (click)="onEdit(crew)">
+                    Edit
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</section>

@@ -1,0 +1,68 @@
+<app-page-header title="Time adjustments" subtitle="Correct time entries with reasons and audit trail.">
+  <button class="ds-button ds-button--secondary" type="button" (click)="loadBoard()" [disabled]="loading()">Refresh</button>
+</app-page-header>
+
+<section class="ds-stack">
+  <form class="ds-card ds-form filter-form" [formGroup]="filterForm" (ngSubmit)="loadBoard()">
+    <div class="ds-field">
+      <label class="ds-label" for="adjust-crew">Crew</label>
+      <select id="adjust-crew" class="ds-select" formControlName="crewId">
+        <option value="">Select crew</option>
+        @for (crew of crews(); track crew.crewId) {
+          <option [value]="crew.crewId">{{ crew.name }}</option>
+        }
+      </select>
+    </div>
+    <div class="ds-field">
+      <label class="ds-label" for="adjust-date">Date</label>
+      <input id="adjust-date" class="ds-input" type="date" formControlName="date" />
+    </div>
+    <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">Load entries</button>
+  </form>
+
+  @if (error()) {
+    <div class="ds-alert ds-alert--error" role="status" aria-live="polite">
+      {{ error()?.message }}
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading-wrap">
+      <app-loading-spinner label="Loading time entries"></app-loading-spinner>
+    </div>
+  } @else {
+    @if (adjustableEntries().length === 0) {
+      <app-empty-state title="No time entries" description="Load a crew to adjust existing time entries."></app-empty-state>
+    } @else {
+      <form class="ds-card ds-form" [formGroup]="adjustForm" (ngSubmit)="onSubmit()">
+        <h2 class="section-title">Adjust time entry</h2>
+        <div class="ds-field">
+          <label class="ds-label" for="adjust-entry">Worker entry</label>
+          <select id="adjust-entry" class="ds-select" formControlName="timeEntryId" (change)="onSelectEntry(adjustForm.controls.timeEntryId.value)">
+            <option value="">Select worker</option>
+            @for (worker of adjustableEntries(); track worker.membershipId) {
+              <option [value]="worker.timeEntryId">{{ worker.displayName }}</option>
+            }
+          </select>
+        </div>
+        <div class="ds-field">
+          <label class="ds-label" for="adjust-checkin">Check-in</label>
+          <input id="adjust-checkin" class="ds-input" type="datetime-local" formControlName="checkInAt" />
+        </div>
+        <div class="ds-field">
+          <label class="ds-label" for="adjust-checkout">Check-out</label>
+          <input id="adjust-checkout" class="ds-input" type="datetime-local" formControlName="checkOutAt" />
+        </div>
+        <div class="ds-field">
+          <label class="ds-label" for="adjust-reason">Reason</label>
+          <input id="adjust-reason" class="ds-input" type="text" formControlName="reason" />
+        </div>
+        <div class="ds-field">
+          <label class="ds-label" for="adjust-note">Note (optional)</label>
+          <textarea id="adjust-note" class="ds-textarea" formControlName="note"></textarea>
+        </div>
+        <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">Submit adjustment</button>
+      </form>
+    }
+  }
+</section>

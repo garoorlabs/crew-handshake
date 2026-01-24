@@ -1,0 +1,36 @@
+.worker-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2);
+}
+
+.worker-title {
+  margin: 0;
+  font-size: var(--ds-font-size-h2);
+  line-height: var(--ds-line-height-h2);
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+.worker-subtitle {
+  margin: 0;
+  font-size: var(--ds-font-size-h3);
+  line-height: var(--ds-line-height-h3);
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+.worker-text,
+.worker-meta {
+  margin: 0;
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-body);
+}
+
+.worker-name {
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+.loading-wrap {
+  display: flex;
+  justify-content: center;
+  padding: var(--ds-space-6);
+}

@@ -1,0 +1,9 @@
+<div class="ds-empty">
+  <h2 class="ds-empty__title">{{ title() }}</h2>
+  @if (description()) {
+    <p class="ds-empty__text">{{ description() }}</p>
+  }
+  <div class="ds-empty__actions">
+    <ng-content></ng-content>
+  </div>
+</div>

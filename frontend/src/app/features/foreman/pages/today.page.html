@@ -1,0 +1,71 @@
+<app-page-header title="Today" subtitle="View confirmations and attendance for your crew.">
+  <button class="ds-button ds-button--secondary" type="button" (click)="loadBoard()" [disabled]="loading()">Refresh</button>
+</app-page-header>
+
+<section class="ds-stack">
+  <form class="ds-card ds-form filter-form" [formGroup]="filterForm" (ngSubmit)="loadBoard()">
+    <div class="ds-field">
+      <label class="ds-label" for="today-crew">Crew</label>
+      <select id="today-crew" class="ds-select" formControlName="crewId">
+        <option value="">Select crew</option>
+        @for (crew of crews(); track crew.crewId) {
+          <option [value]="crew.crewId">{{ crew.name }}</option>
+        }
+      </select>
+    </div>
+    <div class="ds-field">
+      <label class="ds-label" for="today-date">Date</label>
+      <input id="today-date" class="ds-input" type="date" formControlName="date" />
+    </div>
+    <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">Load</button>
+  </form>
+
+  @if (error()) {
+    <div class="ds-alert ds-alert--error" role="status" aria-live="polite">
+      {{ error()?.message }}
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading-wrap">
+      <app-loading-spinner label="Loading today board"></app-loading-spinner>
+    </div>
+  } @else {
+    @if (!board() || board()?.workers?.length === 0) {
+      <app-empty-state title="No roster loaded" description="Select a crew to view today's roster."></app-empty-state>
+    } @else {
+      <div class="ds-card">
+        <div class="summary-row">
+          <div>
+            <div class="summary-label">Crew</div>
+            <div class="summary-value">{{ board()?.crewName }}</div>
+          </div>
+          <div>
+            <div class="summary-label">Call site</div>
+            <div class="summary-value">{{ board()?.siteName || 'Not sent' }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="ds-list" role="list">
+        @for (worker of board()?.workers ?? []; track worker.membershipId) {
+          <div class="ds-list__item">
+            <div class="ds-list__row">
+              <div>
+                <div class="worker-name">{{ worker.displayName }}</div>
+                <div class="worker-meta">{{ worker.phoneE164 }}</div>
+              </div>
+              <app-status-badge
+                [tone]="worker.hasException ? 'warning' : 'info'"
+                [label]="worker.handshakeStatus || 'Unconfirmed'"
+              ></app-status-badge>
+            </div>
+            <div class="ds-list__row">
+              <div class="worker-meta">Check-in: {{ worker.checkInAt || 'N/A' }}</div>
+              <div class="worker-meta">Check-out: {{ worker.checkOutAt || 'N/A' }}</div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</section>

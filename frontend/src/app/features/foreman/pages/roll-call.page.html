@@ -1,0 +1,82 @@
+<app-page-header title="Roll call" subtitle="Mark attendance when workers can't use the link.">
+  <button class="ds-button ds-button--secondary" type="button" (click)="loadBoard()" [disabled]="loading()">Refresh</button>
+</app-page-header>
+
+<section class="ds-stack">
+  <form class="ds-card ds-form filter-form" [formGroup]="filterForm" (ngSubmit)="loadBoard()">
+    <div class="ds-field">
+      <label class="ds-label" for="roll-crew">Crew</label>
+      <select id="roll-crew" class="ds-select" formControlName="crewId">
+        <option value="">Select crew</option>
+        @for (crew of crews(); track crew.crewId) {
+          <option [value]="crew.crewId">{{ crew.name }}</option>
+        }
+      </select>
+    </div>
+    <div class="ds-field">
+      <label class="ds-label" for="roll-date">Date</label>
+      <input id="roll-date" class="ds-input" type="date" formControlName="date" />
+    </div>
+    <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">Load roster</button>
+  </form>
+
+  @if (error()) {
+    <div class="ds-alert ds-alert--error" role="status" aria-live="polite">
+      {{ error()?.message }}
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading-wrap">
+      <app-loading-spinner label="Loading roll call"></app-loading-spinner>
+    </div>
+  } @else {
+    @if (!board() || board()?.workers?.length === 0) {
+      <app-empty-state title="No roster loaded" description="Select a crew to start roll call."></app-empty-state>
+    } @else {
+      <form class="ds-card ds-form" (ngSubmit)="submitRollCall()">
+        <h2 class="section-title">Attendance</h2>
+        <div class="roll-list">
+          @for (worker of board()?.workers ?? []; track worker.membershipId) {
+            <div class="roll-item">
+              <div class="roll-info">
+                <div class="roll-name">{{ worker.displayName }}</div>
+                <div class="roll-phone">{{ worker.phoneE164 }}</div>
+              </div>
+              <div class="roll-options" role="group" [attr.aria-label]="'Attendance for ' + worker.displayName">
+                <label>
+                  <input
+                    type="radio"
+                    [name]="'status-' + worker.membershipId"
+                    [checked]="entries()[worker.membershipId] === 'PRESENT'"
+                    (change)="setStatus(worker.membershipId, 'PRESENT')"
+                  />
+                  Present
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    [name]="'status-' + worker.membershipId"
+                    [checked]="entries()[worker.membershipId] === 'LATE'"
+                    (change)="setStatus(worker.membershipId, 'LATE')"
+                  />
+                  Late
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    [name]="'status-' + worker.membershipId"
+                    [checked]="entries()[worker.membershipId] === 'ABSENT'"
+                    (change)="setStatus(worker.membershipId, 'ABSENT')"
+                  />
+                  Absent
+                </label>
+              </div>
+            </div>
+          }
+        </div>
+        <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">Submit roll call</button>
+      </form>
+    }
+  }
+</section>

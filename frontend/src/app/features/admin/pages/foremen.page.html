@@ -1,0 +1,107 @@
+<app-page-header title="Foremen" subtitle="Manage foreman access and activity.">
+  <button class="ds-button ds-button--secondary" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+</app-page-header>
+
+<section class="ds-stack">
+  <form class="ds-card ds-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <h2 class="section-title">{{ formTitle() }}</h2>
+    <div class="ds-field">
+      <label class="ds-label" for="foreman-name">Full name</label>
+      <input
+        id="foreman-name"
+        class="ds-input"
+        type="text"
+        formControlName="displayName"
+        [class.ds-input--error]="form.controls.displayName.touched && form.controls.displayName.invalid"
+        aria-describedby="foreman-name-error"
+        [attr.aria-invalid]="form.controls.displayName.touched && form.controls.displayName.invalid"
+      />
+      @if (form.controls.displayName.touched && form.controls.displayName.invalid) {
+        <p id="foreman-name-error" class="ds-error-text" role="status">Name is required.</p>
+      }
+    </div>
+
+    @if (!isEditing()) {
+      <div class="ds-field">
+        <label class="ds-label" for="foreman-phone">Phone number</label>
+        <input
+          id="foreman-phone"
+          class="ds-input"
+          type="tel"
+          formControlName="phone"
+          autocomplete="tel"
+          [class.ds-input--error]="form.controls.phone.touched && form.controls.phone.invalid"
+          aria-describedby="foreman-phone-error"
+          [attr.aria-invalid]="form.controls.phone.touched && form.controls.phone.invalid"
+        />
+        @if (form.controls.phone.touched && form.controls.phone.invalid) {
+          <p id="foreman-phone-error" class="ds-error-text" role="status">Phone is required.</p>
+        }
+      </div>
+    }
+
+    <label class="ds-field checkbox-field">
+      <span class="ds-label">Active</span>
+      <input type="checkbox" formControlName="active" />
+    </label>
+
+    <div class="ds-inline-actions">
+      <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">
+        {{ submitLabel() }}
+      </button>
+      @if (isEditing()) {
+        <button class="ds-button ds-button--ghost" type="button" (click)="onCancelEdit()" [disabled]="loading()">
+          Cancel
+        </button>
+      }
+    </div>
+  </form>
+
+  @if (error()) {
+    <div class="ds-alert ds-alert--error" role="status" aria-live="polite">
+      {{ error()?.message }}
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading-wrap">
+      <app-loading-spinner label="Loading foremen"></app-loading-spinner>
+    </div>
+  } @else {
+    @if (foremen().length === 0) {
+      <app-empty-state title="No foremen yet" description="Add a foreman to assign crew leadership."></app-empty-state>
+    } @else {
+      <div class="ds-table-wrap">
+        <table class="ds-table" aria-label="Foremen">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (foreman of foremen(); track trackById($index, foreman)) {
+              <tr>
+                <td>{{ foreman.displayName }}</td>
+                <td>{{ foreman.phoneE164 }}</td>
+                <td>
+                  <app-status-badge
+                    [tone]="foreman.active ? 'success' : 'warning'"
+                    [label]="foreman.active ? 'Active' : 'Inactive'"
+                  ></app-status-badge>
+                </td>
+                <td>
+                  <button class="ds-button ds-button--ghost" type="button" (click)="onEdit(foreman)">
+                    Edit
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</section>

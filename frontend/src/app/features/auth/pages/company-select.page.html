@@ -1,0 +1,39 @@
+<section class="company-card ds-card">
+  <header class="company-header">
+    <h1 class="company-title">Choose your company</h1>
+    <p class="company-subtitle">Select the company you are working with today.</p>
+  </header>
+
+  @if (error()) {
+    <div class="ds-alert ds-alert--error" role="status" aria-live="polite">
+      {{ error()?.message }}
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="company-loading" role="status" aria-live="polite">Loading companies...</div>
+  } @else {
+    @if (memberships().length === 0) {
+      <app-empty-state title="No companies available" description="Ask your admin to add your membership."></app-empty-state>
+    } @else {
+      <ul class="ds-list" role="list">
+        @for (membership of memberships(); track membership.membershipId) {
+          <li class="ds-list__item">
+            <div class="company-info">
+              <div class="company-name">{{ membership.companyName }}</div>
+              <div class="company-roles">Roles: {{ membership.roles.join(', ') }}</div>
+            </div>
+            <button
+              class="ds-button ds-button--secondary"
+              type="button"
+              (click)="onSelectCompany(membership.companyId)"
+              [disabled]="loading()"
+            >
+              Select
+            </button>
+          </li>
+        }
+      </ul>
+    }
+  }
+</section>

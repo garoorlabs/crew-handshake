@@ -1,0 +1,139 @@
+<app-page-header title="Crew calls" subtitle="Send today's instructions and track delivery.">
+  <button class="ds-button ds-button--secondary" type="button" (click)="loadCrewCalls()" [disabled]="loading()">
+    Refresh
+  </button>
+</app-page-header>
+
+<section class="ds-stack">
+  <form class="ds-card ds-form filter-form" [formGroup]="filterForm" (ngSubmit)="loadCrewCalls()">
+    <div class="ds-field">
+      <label class="ds-label" for="crew-call-crew">Crew</label>
+      <select id="crew-call-crew" class="ds-select" formControlName="crewId" (change)="sendForm.controls.crewId.setValue(filterForm.controls.crewId.value)">
+        <option value="">Select crew</option>
+        @for (crew of crews(); track crew.crewId) {
+          <option [value]="crew.crewId">{{ crew.name }}</option>
+        }
+      </select>
+    </div>
+    <div class="ds-field">
+      <label class="ds-label" for="crew-call-date">Date</label>
+      <input id="crew-call-date" class="ds-input" type="date" formControlName="date" />
+    </div>
+    <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">Load calls</button>
+  </form>
+
+  <form class="ds-card ds-form" [formGroup]="sendForm" (ngSubmit)="onSend()">
+    <h2 class="section-title">{{ submitLabel() }}</h2>
+    <div class="ds-field">
+      <label class="ds-label" for="send-crew">Crew</label>
+      <select id="send-crew" class="ds-select" formControlName="crewId">
+        @for (crew of crews(); track crew.crewId) {
+          <option [value]="crew.crewId">{{ crew.name }}</option>
+        }
+      </select>
+    </div>
+    <div class="ds-field">
+      <label class="ds-label" for="send-site">Site</label>
+      <select id="send-site" class="ds-select" formControlName="siteId">
+        <option value="">Select site</option>
+        @for (site of sites(); track site.siteId) {
+          <option [value]="site.siteId">{{ site.name }}</option>
+        }
+      </select>
+    </div>
+    <div class="ds-field">
+      <label class="ds-label" for="send-start">Start time</label>
+      <input id="send-start" class="ds-input" type="datetime-local" formControlName="startAt" />
+    </div>
+    <div class="ds-field">
+      <label class="ds-label" for="send-meet">Meet point</label>
+      <input id="send-meet" class="ds-input" type="text" formControlName="meetPoint" />
+    </div>
+    <div class="ds-inline-actions">
+      <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">{{ submitLabel() }}</button>
+      @if (isResend()) {
+        <button class="ds-button ds-button--ghost" type="button" (click)="clearSelection()">Clear</button>
+      }
+    </div>
+  </form>
+
+  @if (error()) {
+    <div class="ds-alert ds-alert--error" role="status" aria-live="polite">
+      {{ error()?.message }}
+    </div>
+  }
+
+  @if (lastSend()) {
+    <div class="ds-card">
+      <h3 class="section-title">Send status</h3>
+      <div class="ds-table-wrap">
+        <table class="ds-table" aria-label="Send status">
+          <thead>
+            <tr>
+              <th>Worker</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th>Error</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (recipient of lastSend()?.recipients ?? []; track recipient.workerMembershipId) {
+              <tr>
+                <td>{{ recipient.workerName }}</td>
+                <td>{{ recipient.phoneE164 }}</td>
+                <td>
+                  <app-status-badge
+                    [tone]="recipient.sendStatus === 'SENT' ? 'success' : 'warning'"
+                    [label]="recipient.sendStatus"
+                  ></app-status-badge>
+                </td>
+                <td>{{ recipient.sendError || 'N/A' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading-wrap">
+      <app-loading-spinner label="Loading crew calls"></app-loading-spinner>
+    </div>
+  } @else {
+    @if (crewCalls().length === 0) {
+      <app-empty-state title="No crew calls yet" description="Send a crew call to see delivery status."></app-empty-state>
+    } @else {
+      <div class="ds-table-wrap">
+        <table class="ds-table" aria-label="Crew calls">
+          <thead>
+            <tr>
+              <th>Start</th>
+              <th>Site</th>
+              <th>Meet point</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (call of crewCalls(); track call.crewCallId) {
+              <tr>
+                <td>{{ call.startAt }}</td>
+                <td>{{ call.siteName }}</td>
+                <td>{{ call.meetPoint }}</td>
+                <td>
+                  <app-status-badge [tone]="'info'" [label]="call.status"></app-status-badge>
+                </td>
+                <td>
+                  <button class="ds-button ds-button--ghost" type="button" (click)="onSelectCall(call)">
+                    Resend
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</section>

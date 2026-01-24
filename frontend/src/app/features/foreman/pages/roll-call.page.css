@@ -1,0 +1,61 @@
+.filter-form {
+  display: grid;
+  gap: var(--ds-space-4);
+}
+
+@media (min-width: 768px) {
+  .filter-form {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: end;
+  }
+}
+
+.section-title {
+  margin: 0;
+  font-size: var(--ds-font-size-h4);
+  line-height: var(--ds-line-height-h4);
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+.roll-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3);
+}
+
+.roll-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2);
+  padding: var(--ds-space-3);
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius);
+  background: var(--ds-color-bg-subtle);
+}
+
+.roll-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+}
+
+.roll-name {
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+.roll-phone {
+  font-size: var(--ds-font-size-small);
+  color: var(--ds-color-text-secondary);
+}
+
+.roll-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-3);
+}
+
+.loading-wrap {
+  display: flex;
+  justify-content: center;
+  padding: var(--ds-space-4);
+}

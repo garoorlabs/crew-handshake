@@ -1,0 +1,47 @@
+.filter-form {
+  display: grid;
+  gap: var(--ds-space-4);
+}
+
+@media (min-width: 768px) {
+  .filter-form {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: end;
+  }
+}
+
+.summary-row {
+  display: grid;
+  gap: var(--ds-space-4);
+}
+
+@media (min-width: 768px) {
+  .summary-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.summary-label {
+  font-size: var(--ds-font-size-small);
+  color: var(--ds-color-text-muted);
+}
+
+.summary-value {
+  font-size: var(--ds-font-size-h4);
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+.worker-name {
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+.worker-meta {
+  font-size: var(--ds-font-size-small);
+  color: var(--ds-color-text-secondary);
+}
+
+.loading-wrap {
+  display: flex;
+  justify-content: center;
+  padding: var(--ds-space-4);
+}

@@ -1,0 +1,36 @@
+.ds-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--ds-radius-round);
+  padding: 0 var(--ds-space-2);
+  height: var(--ds-space-6);
+  font-size: var(--ds-font-size-small);
+  font-weight: var(--ds-font-weight-medium);
+  background: var(--ds-color-bg-subtle);
+  color: var(--ds-color-text-secondary);
+  border: 1px solid var(--ds-color-border);
+}
+
+.ds-badge--success {
+  background: var(--ds-color-success-bg);
+  color: var(--ds-color-success-text);
+  border-color: var(--ds-color-success-border);
+}
+
+.ds-badge--warning {
+  background: var(--ds-color-warning-bg);
+  color: var(--ds-color-warning-text);
+  border-color: var(--ds-color-warning-border);
+}
+
+.ds-badge--error {
+  background: var(--ds-color-error-bg);
+  color: var(--ds-color-error-text);
+  border-color: var(--ds-color-error-border);
+}
+
+.ds-badge--info {
+  background: var(--ds-color-info-bg);
+  color: var(--ds-color-info-text);
+  border-color: var(--ds-color-info-border);
+}

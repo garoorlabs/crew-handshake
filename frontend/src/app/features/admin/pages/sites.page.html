@@ -1,0 +1,98 @@
+<app-page-header title="Sites" subtitle="Keep job sites and addresses current.">
+  <button class="ds-button ds-button--secondary" type="button" (click)="load()" [disabled]="loading()">Refresh</button>
+</app-page-header>
+
+<section class="ds-stack">
+  <form class="ds-card ds-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <h2 class="section-title">{{ formTitle() }}</h2>
+    <div class="ds-field">
+      <label class="ds-label" for="site-name">Site name</label>
+      <input
+        id="site-name"
+        class="ds-input"
+        type="text"
+        formControlName="name"
+        [class.ds-input--error]="form.controls.name.touched && form.controls.name.invalid"
+        aria-describedby="site-name-error"
+        [attr.aria-invalid]="form.controls.name.touched && form.controls.name.invalid"
+      />
+      @if (form.controls.name.touched && form.controls.name.invalid) {
+        <p id="site-name-error" class="ds-error-text" role="status">Site name is required.</p>
+      }
+    </div>
+
+    <div class="ds-field">
+      <label class="ds-label" for="site-address">Address</label>
+      <input id="site-address" class="ds-input" type="text" formControlName="address" />
+    </div>
+
+    <div class="ds-field">
+      <label class="ds-label" for="site-notes">Notes</label>
+      <textarea id="site-notes" class="ds-textarea" formControlName="notes"></textarea>
+    </div>
+
+    <label class="ds-field checkbox-field">
+      <span class="ds-label">Active</span>
+      <input type="checkbox" formControlName="active" />
+    </label>
+
+    <div class="ds-inline-actions">
+      <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">
+        {{ submitLabel() }}
+      </button>
+      @if (isEditing()) {
+        <button class="ds-button ds-button--ghost" type="button" (click)="onCancelEdit()" [disabled]="loading()">
+          Cancel
+        </button>
+      }
+    </div>
+  </form>
+
+  @if (error()) {
+    <div class="ds-alert ds-alert--error" role="status" aria-live="polite">
+      {{ error()?.message }}
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading-wrap">
+      <app-loading-spinner label="Loading sites"></app-loading-spinner>
+    </div>
+  } @else {
+    @if (sites().length === 0) {
+      <app-empty-state title="No sites yet" description="Add job sites so foremen can send crew calls."></app-empty-state>
+    } @else {
+      <div class="ds-table-wrap">
+        <table class="ds-table" aria-label="Sites">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Address</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (site of sites(); track trackById($index, site)) {
+              <tr>
+                <td>{{ site.name }}</td>
+                <td>{{ site.address || 'N/A' }}</td>
+                <td>
+                  <app-status-badge
+                    [tone]="site.active ? 'success' : 'warning'"
+                    [label]="site.active ? 'Active' : 'Inactive'"
+                  ></app-status-badge>
+                </td>
+                <td>
+                  <button class="ds-button ds-button--ghost" type="button" (click)="onEdit(site)">
+                    Edit
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</section>

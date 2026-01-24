@@ -1,0 +1,9 @@
+<span
+  class="ds-badge"
+  [class.ds-badge--success]="tone() === 'success'"
+  [class.ds-badge--warning]="tone() === 'warning'"
+  [class.ds-badge--error]="tone() === 'error'"
+  [class.ds-badge--info]="tone() === 'info'"
+>
+  {{ label() }}
+</span>

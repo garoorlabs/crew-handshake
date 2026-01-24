@@ -1,0 +1,85 @@
+<section class="auth-card ds-card">
+  <header class="auth-header">
+    <h1 class="auth-title">Sign in</h1>
+    <p class="auth-subtitle">Use your phone number to receive a one-time code.</p>
+  </header>
+
+  @if (showTopError()) {
+    <div class="ds-alert ds-alert--error" role="status" aria-live="polite">
+      {{ error()?.message }}
+    </div>
+  }
+
+  @if (step() === 'phone') {
+    <form class="ds-form" [formGroup]="phoneForm" (ngSubmit)="onSendCode()">
+      <div class="ds-field">
+        <label class="ds-label" for="phone">Phone number</label>
+        <input
+          id="phone"
+          class="ds-input"
+          [class.ds-input--error]="isPhoneInvalidState()"
+          type="tel"
+          formControlName="phone"
+          autocomplete="tel"
+          [attr.aria-describedby]="phoneDescribedBy()"
+          [attr.aria-invalid]="isPhoneInvalidState()"
+        />
+        <p id="phone-help" class="ds-helper">Use E.164 format or a US 10-digit number.</p>
+        @if (phoneErrorMessage()) {
+          <p id="phone-error" class="ds-error-text" role="status">{{ phoneErrorMessage() }}</p>
+        }
+      </div>
+      <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">
+        {{ loading() ? 'Sending code...' : 'Send code' }}
+      </button>
+    </form>
+  } @else {
+    <form class="ds-form" [formGroup]="codeForm" (ngSubmit)="onVerifyCode()">
+      <div class="ds-field">
+        <label class="ds-label" for="code">Verification code</label>
+        <input
+          id="code"
+          class="ds-input"
+          [class.ds-input--error]="isCodeInvalidState()"
+          type="text"
+          inputmode="numeric"
+          formControlName="code"
+          autocomplete="one-time-code"
+          [attr.aria-describedby]="codeDescribedBy()"
+          [attr.aria-invalid]="isCodeInvalidState()"
+        />
+        <p id="code-help" class="ds-helper">We sent a 6-digit code to {{ phoneValue() }}.</p>
+        @if (codeErrorMessage()) {
+          <p id="code-error" class="ds-error-text" role="status">{{ codeErrorMessage() }}</p>
+        }
+      </div>
+      <div class="auth-actions">
+        <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">
+          {{ loading() ? 'Verifying...' : 'Verify code' }}
+        </button>
+        <button class="ds-button ds-button--ghost" type="button" (click)="onEditPhone()" [disabled]="loading()">
+          Edit phone
+        </button>
+      </div>
+    </form>
+  }
+</section>
+
+<section class="auth-card ds-card demo-card">
+  <header class="auth-header">
+    <h2 class="auth-title">Demo access</h2>
+    <p class="auth-subtitle">One-click login for the seeded demo users.</p>
+  </header>
+  <div class="auth-actions">
+    <button class="ds-button ds-button--primary" type="button" (click)="onDemoLogin('admin')" [disabled]="loading()">
+      Admin demo
+    </button>
+    <button class="ds-button ds-button--secondary" type="button" (click)="onDemoLogin('foreman')" [disabled]="loading()">
+      Foreman demo
+    </button>
+    <button class="ds-button ds-button--ghost" type="button" (click)="onOpenWorkerDemo()" [disabled]="loading()">
+      Open worker demo
+    </button>
+  </div>
+  <p class="ds-helper">Uses seeded phones: Admin +14155550100, Foreman +14155550101, Worker +14155550102.</p>
+</section>

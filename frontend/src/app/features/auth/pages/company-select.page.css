@@ -1,0 +1,44 @@
+.company-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-4);
+}
+
+.company-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2);
+}
+
+.company-title {
+  margin: 0;
+  font-size: var(--ds-font-size-h2);
+  line-height: var(--ds-line-height-h2);
+  font-weight: var(--ds-font-weight-semibold);
+}
+
+.company-subtitle {
+  margin: 0;
+  color: var(--ds-color-text-secondary);
+}
+
+.company-loading {
+  color: var(--ds-color-text-secondary);
+}
+
+.company-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+}
+
+.company-name {
+  font-weight: var(--ds-font-weight-semibold);
+  color: var(--ds-color-text);
+}
+
+.company-roles {
+  font-size: var(--ds-font-size-small);
+  line-height: var(--ds-line-height-small);
+  color: var(--ds-color-text-secondary);
+}
