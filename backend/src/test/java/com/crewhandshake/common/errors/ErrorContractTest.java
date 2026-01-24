@@ -54,4 +54,17 @@ class ErrorContractTest {
     assertThat(response.getBody()).isNotNull();
     assertThat(response.getBody().errorCode()).isEqualTo(ApiErrorCode.FORBIDDEN.name());
   }
+
+  @Test
+  void unknownErrorsReturnSafePayload() {
+    ResponseEntity<ApiErrorResponse> response = restTemplate.getForEntity(
+        "/api/v1/public/test-errors/unknown",
+        ApiErrorResponse.class
+    );
+
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+    assertThat(response.getBody()).isNotNull();
+    assertThat(response.getBody().errorCode()).isEqualTo(ApiErrorCode.UNKNOWN.name());
+    assertThat(response.getBody().message()).isNotBlank();
+  }
 }
