@@ -1,0 +1,40 @@
+@if (open()) {
+  <div
+    class="ds-modal-overlay"
+    [class.ds-modal-overlay--sheet]="mode() === 'sheet'"
+    (click)="onBackdropClick($event)"
+  >
+    <div
+      class="ds-modal"
+      [class.ds-modal--sheet]="mode() === 'sheet'"
+      role="dialog"
+      aria-modal="true"
+      [attr.aria-labelledby]="title() ? titleId() : null"
+      [attr.aria-describedby]="description() ? descriptionId() : null"
+      [attr.aria-label]="title() ? null : ariaLabel()"
+      tabindex="-1"
+      (keydown)="onKeydown($event)"
+      #dialog
+    >
+      <header class="ds-modal__header">
+        @if (title()) {
+          <h2 class="ds-modal__title" [attr.id]="titleId()">{{ title() }}</h2>
+        }
+        <button
+          class="ds-button ds-button--ghost"
+          type="button"
+          (click)="onCloseClick()"
+          [attr.aria-label]="closeLabel()"
+        >
+          {{ closeLabel() }}
+        </button>
+      </header>
+      @if (description()) {
+        <p class="ds-modal__description" [attr.id]="descriptionId()">{{ description() }}</p>
+      }
+      <section class="ds-modal__body">
+        <ng-content></ng-content>
+      </section>
+    </div>
+  </div>
+}

@@ -1,0 +1,16 @@
+<input
+  class="ds-input"
+  [class.ds-input--error]="invalid()"
+  [attr.id]="id() || null"
+  [attr.name]="name() || null"
+  [attr.type]="type()"
+  [attr.placeholder]="placeholder() || null"
+  [attr.autocomplete]="autocomplete() || null"
+  [attr.inputmode]="inputMode() || null"
+  [attr.aria-describedby]="ariaDescribedBy() || null"
+  [attr.aria-invalid]="invalid() ? 'true' : null"
+  [disabled]="isDisabled()"
+  [value]="value()"
+  (input)="onInput($event)"
+  (blur)="onBlur()"
+/>
