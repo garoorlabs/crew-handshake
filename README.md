@@ -51,7 +51,18 @@ The frontend dev server proxies `/api` to the backend so local routing matches p
 - `scripts/lint.sh`
 - `scripts/test.sh`
 - `scripts/build.sh`
+- `scripts/verify.sh`
 
 ## Environment
 
 See `docs/env.md` and `backend/.env.example`.
+
+## Docs
+
+- `docs/env.md`
+- `docs/ci.md`
+- `docs/error-contract.md`
+- `docs/design-system-usage.md`
+- `docs/frontend-structure.md`
+- `docs/backend-structure.md`
+- `docs/dev-proxy.md`
