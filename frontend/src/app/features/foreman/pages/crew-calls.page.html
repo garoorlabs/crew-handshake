@@ -10,7 +10,11 @@
 </app-page-header>
 
 <section class="ds-stack">
-  <form class="ds-card ds-form filter-form" [formGroup]="filterForm" (ngSubmit)="loadCrewCalls()">
+  <form
+    class="ds-card ds-form ds-filter-form"
+    [formGroup]="filterForm"
+    (ngSubmit)="loadCrewCalls()"
+  >
     <div class="ds-field">
       <label class="ds-label" for="crew-call-crew">Crew</label>
       <select
@@ -35,7 +39,7 @@
   </form>
 
   <form class="ds-card ds-form" [formGroup]="sendForm" (ngSubmit)="onSend()">
-    <h2 class="section-title">{{ submitLabel() }}</h2>
+    <h2 class="ds-section-title ds-section-title--compact">{{ submitLabel() }}</h2>
     <div class="ds-field">
       <label class="ds-label" for="send-crew">Crew</label>
       <select id="send-crew" class="ds-select" formControlName="crewId">
@@ -81,7 +85,7 @@
 
   @if (lastSend()) {
     <div class="ds-card">
-      <h3 class="section-title">Send status</h3>
+      <h3 class="ds-section-title ds-section-title--compact">Send status</h3>
       <div class="ds-table-wrap">
         <table class="ds-table" aria-label="Send status">
           <thead>
@@ -113,7 +117,7 @@
   }
 
   @if (loading()) {
-    <div class="loading-wrap">
+    <div class="ds-loading">
       <app-loading-spinner label="Loading crew calls"></app-loading-spinner>
     </div>
   } @else {

@@ -11,7 +11,7 @@
 
 <section class="ds-stack">
   <form class="ds-card ds-form" [formGroup]="form" (ngSubmit)="onSubmit()">
-    <h2 class="section-title">{{ formTitle() }}</h2>
+    <h2 class="ds-section-title">{{ formTitle() }}</h2>
     <div class="ds-field">
       <label class="ds-label" for="site-name">Site name</label>
       <input
@@ -38,7 +38,7 @@
       <textarea id="site-notes" class="ds-textarea" formControlName="notes"></textarea>
     </div>
 
-    <label class="ds-field checkbox-field">
+    <label class="ds-field ds-field--inline">
       <span class="ds-label">Active</span>
       <input type="checkbox" formControlName="active" />
     </label>
@@ -67,7 +67,7 @@
   }
 
   @if (loading()) {
-    <div class="loading-wrap">
+    <div class="ds-loading">
       <app-loading-spinner label="Loading sites"></app-loading-spinner>
     </div>
   } @else {

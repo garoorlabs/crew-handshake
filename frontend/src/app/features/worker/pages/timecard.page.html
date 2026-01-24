@@ -1,7 +1,7 @@
 @if (loading()) {
-  <div class="loading-wrap">
-    <app-loading-spinner label="Loading timecard"></app-loading-spinner>
-  </div>
+    <div class="ds-loading ds-loading--spacious">
+      <app-loading-spinner label="Loading timecard"></app-loading-spinner>
+    </div>
 } @else {
   @if (error()) {
     <div class="ds-card">

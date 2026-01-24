@@ -10,7 +10,11 @@
 </app-page-header>
 
 <section class="ds-stack">
-  <form class="ds-card ds-form filter-form" [formGroup]="filterForm" (ngSubmit)="loadBoard()">
+  <form
+    class="ds-card ds-form ds-filter-form"
+    [formGroup]="filterForm"
+    (ngSubmit)="loadBoard()"
+  >
     <div class="ds-field">
       <label class="ds-label" for="today-crew">Crew</label>
       <select id="today-crew" class="ds-select" formControlName="crewId">
@@ -34,7 +38,7 @@
   }
 
   @if (loading()) {
-    <div class="loading-wrap">
+    <div class="ds-loading">
       <app-loading-spinner label="Loading today board"></app-loading-spinner>
     </div>
   } @else {

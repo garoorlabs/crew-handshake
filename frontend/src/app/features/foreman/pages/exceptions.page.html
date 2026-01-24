@@ -13,7 +13,11 @@
 </app-page-header>
 
 <section class="ds-stack">
-  <form class="ds-card ds-form filter-form" [formGroup]="filterForm" (ngSubmit)="loadExceptions()">
+  <form
+    class="ds-card ds-form ds-filter-form"
+    [formGroup]="filterForm"
+    (ngSubmit)="loadExceptions()"
+  >
     <div class="ds-field">
       <label class="ds-label" for="foreman-exception-crew">Crew</label>
       <select id="foreman-exception-crew" class="ds-select" formControlName="crewId">
@@ -39,7 +43,7 @@
   }
 
   @if (loading()) {
-    <div class="loading-wrap">
+    <div class="ds-loading">
       <app-loading-spinner label="Loading exceptions"></app-loading-spinner>
     </div>
   } @else {
@@ -84,7 +88,7 @@
 
   @if (exceptions().length > 0) {
     <form class="ds-card ds-form" [formGroup]="resolveForm" (ngSubmit)="onResolve()">
-      <h2 class="section-title">Resolve exception</h2>
+      <h2 class="ds-section-title ds-section-title--compact">Resolve exception</h2>
       <div class="ds-field">
         <label class="ds-label" for="foreman-resolve-exception">Exception</label>
         <select id="foreman-resolve-exception" class="ds-select" formControlName="exceptionId">
