@@ -44,3 +44,14 @@ scripts/frontend-dev.sh
 
 The frontend dev server proxies `/api` to the backend so local routing matches production.
 
+## Scripts
+
+- `scripts/backend-dev.sh`
+- `scripts/frontend-dev.sh`
+- `scripts/lint.sh`
+- `scripts/test.sh`
+- `scripts/build.sh`
+
+## Environment
+
+See `docs/env.md` and `backend/.env.example`.
