@@ -39,6 +39,6 @@ describe('mapHttpError', () => {
     const mapped = mapHttpError(error);
 
     expect(mapped.category).toBe('Validation');
-    expect(mapped.fieldErrors?.name).toBe('Required');
+    expect(mapped.fieldErrors?.['name']).toBe('Required');
   });
 });
