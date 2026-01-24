@@ -1,0 +1,7 @@
+<section class="retry-block" role="status" aria-live="polite">
+  <h3 class="retry-block__title">{{ title() }}</h3>
+  <p class="retry-block__message">{{ message() }}</p>
+  <button class="ds-button ds-button--secondary" type="button" (click)="retry.emit()">
+    {{ actionLabel() }}
+  </button>
+</section>
