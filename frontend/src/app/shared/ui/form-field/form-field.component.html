@@ -1,0 +1,12 @@
+<div class="form-field">
+  @if (label()) {
+    <label class="ds-label" [attr.for]="forId()">{{ label() }}</label>
+  }
+  <ng-content></ng-content>
+  @if (hint()) {
+    <p class="ds-helper">{{ hint() }}</p>
+  }
+  @if (error()) {
+    <p class="ds-error-text" role="status" [attr.id]="errorId()">{{ error() }}</p>
+  }
+</div>
