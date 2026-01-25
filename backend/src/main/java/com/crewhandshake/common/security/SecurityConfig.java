@@ -26,7 +26,7 @@ public class SecurityConfig {
             .requestMatchers("/api/v1/auth/**", "/api/v1/public/**").permitAll()
             .anyRequest().authenticated()
         )
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
         .addFilterBefore(sessionAuthFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
         .formLogin(form -> form.disable())
         .httpBasic(basic -> basic.disable());
