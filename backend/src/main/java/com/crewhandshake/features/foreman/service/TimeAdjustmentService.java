@@ -47,11 +47,8 @@ public class TimeAdjustmentService {
   public TimeAdjustmentResponse adjustTime(TimeAdjustmentRequest request) {
     tenantContext.requireForemanOrAdmin();
     UUID companyId = tenantContext.requireCompanyId();
-    TimeEntryEntity timeEntry = timeEntryRepository.findById(request.timeEntryId())
+    TimeEntryEntity timeEntry = timeEntryRepository.findByCompanyIdAndId(companyId, request.timeEntryId())
         .orElseThrow(() -> new ApiException(ApiErrorCode.NOT_FOUND, HttpStatus.NOT_FOUND, "Time entry not found"));
-    if (!timeEntry.getCompany().getId().equals(companyId)) {
-      throw new ApiException(ApiErrorCode.FORBIDDEN, HttpStatus.FORBIDDEN, "Not permitted");
-    }
     ensureCrewScope(timeEntry);
 
     Instant checkInAt = timeParser.parseInstant(request.checkInAt(), "checkInAt");
