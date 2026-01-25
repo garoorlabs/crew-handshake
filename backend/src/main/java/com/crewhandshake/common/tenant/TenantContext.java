@@ -52,12 +52,16 @@ public class TenantContext {
   }
 
   public void requireAdmin() {
+    requireCompanyId();
+    requireMembershipId();
     if (!isAdmin()) {
       throw new ApiException(ApiErrorCode.FORBIDDEN, HttpStatus.FORBIDDEN, "Not permitted");
     }
   }
 
   public void requireForemanOrAdmin() {
+    requireCompanyId();
+    requireMembershipId();
     if (!(isAdmin() || isForeman())) {
       throw new ApiException(ApiErrorCode.FORBIDDEN, HttpStatus.FORBIDDEN, "Not permitted");
     }

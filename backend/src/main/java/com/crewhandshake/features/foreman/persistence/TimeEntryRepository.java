@@ -19,6 +19,8 @@ public interface TimeEntryRepository extends JpaRepository<TimeEntryEntity, UUID
 
   Optional<TimeEntryEntity> findByCompanyIdAndWorkerMembershipIdAndWorkDate(UUID companyId, UUID workerMembershipId, LocalDate workDate);
 
+  Optional<TimeEntryEntity> findByCompanyIdAndId(UUID companyId, UUID id);
+
   long countByCompanyIdAndWorkDateBetween(UUID companyId, LocalDate start, LocalDate end);
 
   List<TimeEntryEntity> findByCompanyIdAndWorkDateBetween(UUID companyId, LocalDate start, LocalDate end);
