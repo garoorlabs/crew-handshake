@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -13,13 +14,16 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfig {
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http, SessionAuthFilter sessionAuthFilter) throws Exception {
+  public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                 SessionAuthFilter sessionAuthFilter,
+                                                 CsrfCookieFilter csrfCookieFilter) throws Exception {
     http
         .csrf(csrf -> csrf
-            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+            .csrfTokenRepository(csrfTokenRepository())
             .ignoringRequestMatchers(
                 new AntPathRequestMatcher("/api/v1/auth/**"),
-                new AntPathRequestMatcher("/api/v1/public/**")
+                new AntPathRequestMatcher("/api/v1/public/**"),
+                new AntPathRequestMatcher("/api/v1/me/active-company")
             )
         )
         .authorizeHttpRequests(auth -> auth
@@ -28,8 +32,17 @@ public class SecurityConfig {
         )
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
         .addFilterBefore(sessionAuthFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
+        .addFilterAfter(csrfCookieFilter, CsrfFilter.class)
         .formLogin(form -> form.disable())
         .httpBasic(basic -> basic.disable());
     return http.build();
+  }
+
+  private CookieCsrfTokenRepository csrfTokenRepository() {
+    CookieCsrfTokenRepository repository = CookieCsrfTokenRepository.withHttpOnlyFalse();
+    repository.setCookieName("CH-XSRF-TOKEN");
+    repository.setHeaderName("X-CH-XSRF-TOKEN");
+    repository.setCookiePath("/");
+    return repository;
   }
 }

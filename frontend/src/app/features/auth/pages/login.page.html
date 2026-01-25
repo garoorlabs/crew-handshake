@@ -19,6 +19,7 @@
           class="ds-input"
           [class.ds-input--error]="isPhoneInvalidState()"
           type="tel"
+          #phoneInput
           formControlName="phone"
           autocomplete="tel"
           [attr.aria-describedby]="phoneDescribedBy()"
@@ -29,7 +30,11 @@
           <p id="phone-error" class="ds-error-text" role="status">{{ phoneErrorMessage() }}</p>
         }
       </div>
-      <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">
+      <button
+        class="ds-button ds-button--primary"
+        type="submit"
+        [disabled]="loading() || phoneForm.invalid"
+      >
         {{ loading() ? 'Sending code...' : 'Send code' }}
       </button>
     </form>
@@ -43,6 +48,7 @@
           [class.ds-input--error]="isCodeInvalidState()"
           type="text"
           inputmode="numeric"
+          #codeInput
           formControlName="code"
           autocomplete="one-time-code"
           [attr.aria-describedby]="codeDescribedBy()"
@@ -54,7 +60,11 @@
         }
       </div>
       <div class="auth-actions">
-        <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">
+        <button
+          class="ds-button ds-button--primary"
+          type="submit"
+          [disabled]="loading() || codeForm.invalid"
+        >
           {{ loading() ? 'Verifying...' : 'Verify code' }}
         </button>
         <button
