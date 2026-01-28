@@ -107,46 +107,85 @@
         ></app-empty-state>
       }
     } @else {
-      <div class="ds-table-wrap">
-        <table class="ds-table" aria-label="Foremen">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Phone</th>
-              <th>Status</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (foreman of foremen(); track trackById($index, foreman)) {
-              <tr [class.foremen-row--editing]="editingId() === foreman.membershipId">
-                <td>{{ foreman.displayName }}</td>
-                <td>{{ foreman.phoneE164 }}</td>
-                <td>
-                  <app-status-badge
-                    [tone]="foreman.active ? 'success' : 'warning'"
-                    [label]="foreman.active ? 'Active' : 'Inactive'"
-                  ></app-status-badge>
-                </td>
-                <td>
-                  <div class="foremen-actions">
-                    @if (editingId() === foreman.membershipId) {
-                      <span class="ds-chip">Editing</span>
-                    }
-                    <button
-                      class="ds-button ds-button--ghost"
-                      type="button"
-                      (click)="onEdit(foreman)"
-                      [attr.aria-label]="'Edit foreman ' + foreman.displayName"
-                    >
-                      Edit
-                    </button>
-                  </div>
-                </td>
+      <div class="foremen-list">
+        <ul class="ds-list" role="list" aria-label="Foremen">
+          @for (foreman of foremen(); track trackById($index, foreman)) {
+            <li
+              class="ds-list__item"
+              [class.foremen-item--editing]="editingId() === foreman.membershipId"
+            >
+              <div class="ds-list__row">
+                <div class="foremen-name">{{ foreman.displayName }}</div>
+                <app-status-badge
+                  [tone]="foreman.active ? 'success' : 'warning'"
+                  [label]="foreman.active ? 'Active' : 'Inactive'"
+                ></app-status-badge>
+              </div>
+              <div class="foremen-meta">
+                <div class="foremen-meta__item">
+                  <span class="foremen-meta__label">Phone</span>
+                  <span>{{ foreman.phoneE164 }}</span>
+                </div>
+              </div>
+              <div class="foremen-list__actions">
+                @if (editingId() === foreman.membershipId) {
+                  <span class="ds-chip">Editing</span>
+                }
+                <button
+                  class="ds-button ds-button--ghost"
+                  type="button"
+                  (click)="onEdit(foreman)"
+                  [attr.aria-label]="'Edit foreman ' + foreman.displayName"
+                >
+                  Edit
+                </button>
+              </div>
+            </li>
+          }
+        </ul>
+      </div>
+      <div class="foremen-table">
+        <div class="ds-table-wrap">
+          <table class="ds-table" aria-label="Foremen">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th></th>
               </tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              @for (foreman of foremen(); track trackById($index, foreman)) {
+                <tr [class.foremen-row--editing]="editingId() === foreman.membershipId">
+                  <td>{{ foreman.displayName }}</td>
+                  <td>{{ foreman.phoneE164 }}</td>
+                  <td>
+                    <app-status-badge
+                      [tone]="foreman.active ? 'success' : 'warning'"
+                      [label]="foreman.active ? 'Active' : 'Inactive'"
+                    ></app-status-badge>
+                  </td>
+                  <td>
+                    <div class="foremen-actions">
+                      @if (editingId() === foreman.membershipId) {
+                        <span class="ds-chip">Editing</span>
+                      }
+                      <button
+                        class="ds-button ds-button--ghost"
+                        type="button"
+                        (click)="onEdit(foreman)"
+                        [attr.aria-label]="'Edit foreman ' + foreman.displayName"
+                      >
+                        Edit
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </div>
     }
   }

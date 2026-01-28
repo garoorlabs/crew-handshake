@@ -2,43 +2,88 @@
   <a class="ds-skip-link" href="#main">Skip to content</a>
   <header class="shell">
     <div class="shell__inner">
-      <div class="shell__brand">Crew Handshake</div>
-      <nav class="shell__nav" aria-label="Admin">
-        <a class="shell__link" routerLink="/a/workers" routerLinkActive="shell__link--active"
-          >Workers</a
-        >
-        <a class="shell__link" routerLink="/a/foremen" routerLinkActive="shell__link--active"
-          >Foremen</a
-        >
-        <a class="shell__link" routerLink="/a/crews" routerLinkActive="shell__link--active"
-          >Crews</a
-        >
-        <a class="shell__link" routerLink="/a/sites" routerLinkActive="shell__link--active"
-          >Sites</a
-        >
-        <a class="shell__link" routerLink="/a/settings" routerLinkActive="shell__link--active"
-          >Settings</a
-        >
-        <a class="shell__link" routerLink="/a/exceptions" routerLinkActive="shell__link--active"
-          >Exceptions</a
-        >
-        <a class="shell__link" routerLink="/a/payroll" routerLinkActive="shell__link--active"
-          >Payroll</a
-        >
-        <a class="shell__link" routerLink="/a/audit" routerLinkActive="shell__link--active"
-          >Audit</a
-        >
-      </nav>
-      <div class="shell__spacer"></div>
-      <div class="shell__actions">
+      <div class="shell__top">
+        <div class="shell__brand">Crew Handshake</div>
         <button
-          class="ds-button ds-button--ghost"
+          class="ds-button ds-button--secondary shell__menu-toggle"
           type="button"
-          (click)="logout()"
-          [disabled]="isLoggingOut"
+          (click)="toggleMenu()"
+          aria-controls="admin-nav"
+          [attr.aria-expanded]="menuOpen() ? 'true' : 'false'"
         >
-          Log out
+          {{ menuOpen() ? 'Close menu' : 'Menu' }}
         </button>
+      </div>
+      <div class="shell__menu" [class.shell__menu--open]="menuOpen()">
+        <nav id="admin-nav" class="shell__nav" aria-label="Admin">
+          <a
+            class="shell__link"
+            routerLink="/a/workers"
+            routerLinkActive="shell__link--active"
+            (click)="closeMenu()"
+            >Workers</a
+          >
+          <a
+            class="shell__link"
+            routerLink="/a/foremen"
+            routerLinkActive="shell__link--active"
+            (click)="closeMenu()"
+            >Foremen</a
+          >
+          <a
+            class="shell__link"
+            routerLink="/a/crews"
+            routerLinkActive="shell__link--active"
+            (click)="closeMenu()"
+            >Crews</a
+          >
+          <a
+            class="shell__link"
+            routerLink="/a/sites"
+            routerLinkActive="shell__link--active"
+            (click)="closeMenu()"
+            >Sites</a
+          >
+          <a
+            class="shell__link"
+            routerLink="/a/settings"
+            routerLinkActive="shell__link--active"
+            (click)="closeMenu()"
+            >Settings</a
+          >
+          <a
+            class="shell__link"
+            routerLink="/a/exceptions"
+            routerLinkActive="shell__link--active"
+            (click)="closeMenu()"
+            >Exceptions</a
+          >
+          <a
+            class="shell__link"
+            routerLink="/a/payroll"
+            routerLinkActive="shell__link--active"
+            (click)="closeMenu()"
+            >Payroll</a
+          >
+          <a
+            class="shell__link"
+            routerLink="/a/audit"
+            routerLinkActive="shell__link--active"
+            (click)="closeMenu()"
+            >Audit</a
+          >
+        </nav>
+        <div class="shell__spacer"></div>
+        <div class="shell__actions">
+          <button
+            class="ds-button ds-button--ghost"
+            type="button"
+            (click)="logout()"
+            [disabled]="isLoggingOut"
+          >
+            Log out
+          </button>
+        </div>
       </div>
     </div>
   </header>
