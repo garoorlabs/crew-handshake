@@ -306,7 +306,10 @@ public class CrewCallService {
                                       String token,
                                       MembershipEntity sender) {
     String baseUrl = appProperties.publicBaseUrl();
-    String link = token == null ? "" : baseUrl.replaceAll("/+$", "") + "/w/t/" + token;
+    String normalizedBaseUrl = baseUrl == null ? "" : baseUrl.trim();
+    String link = token == null || normalizedBaseUrl.isBlank()
+        ? ""
+        : normalizedBaseUrl.replaceAll("/+$", "") + "/w/t/" + token;
     String timeLabel = SMS_TIME.format(ZonedDateTime.ofInstant(startAt, DEFAULT_ZONE));
     String senderName = resolveSenderName(sender);
     StringBuilder message = new StringBuilder();
