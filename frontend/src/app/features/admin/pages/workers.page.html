@@ -3,7 +3,7 @@
     class="ds-button ds-button--secondary"
     type="button"
     (click)="load()"
-    [disabled]="loading()"
+    [disabled]="isBusy()"
   >
     Refresh
   </button>
@@ -19,14 +19,12 @@
         class="ds-input"
         type="text"
         formControlName="displayName"
-        [class.ds-input--error]="
-          form.controls.displayName.touched && form.controls.displayName.invalid
-        "
-        aria-describedby="worker-name-error"
-        [attr.aria-invalid]="form.controls.displayName.touched && form.controls.displayName.invalid"
+        [class.ds-input--error]="!!nameError()"
+        [attr.aria-describedby]="nameErrorId()"
+        [attr.aria-invalid]="nameError() ? 'true' : null"
       />
-      @if (form.controls.displayName.touched && form.controls.displayName.invalid) {
-        <p id="worker-name-error" class="ds-error-text" role="status">Name is required.</p>
+      @if (nameError()) {
+        <app-field-error [id]="nameErrorId()" [message]="nameError()"></app-field-error>
       }
     </div>
 
@@ -39,12 +37,12 @@
           type="tel"
           formControlName="phone"
           autocomplete="tel"
-          [class.ds-input--error]="form.controls.phone.touched && form.controls.phone.invalid"
-          aria-describedby="worker-phone-error"
-          [attr.aria-invalid]="form.controls.phone.touched && form.controls.phone.invalid"
+          [class.ds-input--error]="!!phoneError()"
+          [attr.aria-describedby]="phoneErrorId()"
+          [attr.aria-invalid]="phoneError() ? 'true' : null"
         />
-        @if (form.controls.phone.touched && form.controls.phone.invalid) {
-          <p id="worker-phone-error" class="ds-error-text" role="status">Phone is required.</p>
+        @if (phoneError()) {
+          <app-field-error [id]="phoneErrorId()" [message]="phoneError()"></app-field-error>
         }
       </div>
     }
@@ -61,21 +59,41 @@
 
     <div class="ds-field">
       <label class="ds-label" for="worker-crew">Crew</label>
-      <select id="worker-crew" class="ds-select" formControlName="crewId">
+      <select
+        id="worker-crew"
+        class="ds-select"
+        formControlName="crewId"
+        [class.ds-input--error]="!!crewError()"
+        [attr.aria-describedby]="crewErrorId()"
+        [attr.aria-invalid]="crewError() ? 'true' : null"
+      >
         <option value="">Unassigned</option>
         @for (crew of crews(); track crew.crewId) {
           <option [value]="crew.crewId">{{ crew.name }}</option>
         }
       </select>
+      @if (crewError()) {
+        <app-field-error [id]="crewErrorId()" [message]="crewError()"></app-field-error>
+      }
     </div>
 
-    <label class="ds-field ds-checkbox-field">
-      <span class="ds-label">Active</span>
-      <input type="checkbox" formControlName="active" />
-    </label>
+    <div class="workers-active">
+      <label class="ds-field ds-checkbox-field" for="worker-active">
+        <span class="ds-label">Active</span>
+        <input
+          id="worker-active"
+          type="checkbox"
+          formControlName="active"
+          aria-describedby="worker-active-help"
+        />
+      </label>
+      <p class="ds-helper" id="worker-active-help">
+        Inactive workers cannot be assigned to crews or receive crew calls.
+      </p>
+    </div>
 
     <div class="ds-inline-actions">
-      <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">
+      <button class="ds-button ds-button--primary" type="submit" [disabled]="isBusy()">
         {{ submitLabel() }}
       </button>
       @if (isEditing()) {
@@ -83,7 +101,7 @@
           class="ds-button ds-button--ghost"
           type="button"
           (click)="onCancelEdit()"
-          [disabled]="loading()"
+          [disabled]="isBusy()"
         >
           Cancel
         </button>
@@ -91,10 +109,19 @@
     </div>
   </form>
 
-  @if (error()) {
-    <div class="ds-alert ds-alert--error" role="status" aria-live="polite">
-      {{ error()?.message }}
-    </div>
+  @if (submitError()) {
+    <app-error-banner
+      [message]="submitError()?.message ?? 'Something went wrong.'"
+    ></app-error-banner>
+  }
+
+  @if (loadError()) {
+    <app-error-banner
+      [message]="loadError()?.message ?? 'Unable to load workers.'"
+      [showRetry]="true"
+      retryLabel="Retry"
+      (retry)="load()"
+    ></app-error-banner>
   }
 
   @if (loading()) {
@@ -103,10 +130,12 @@
     </div>
   } @else {
     @if (workers().length === 0) {
-      <app-empty-state
-        title="No workers yet"
-        description="Add a worker to start building your roster."
-      ></app-empty-state>
+      @if (!loadError()) {
+        <app-empty-state
+          title="No workers yet"
+          description="Add a worker to start building your roster."
+        ></app-empty-state>
+      }
     } @else {
       <div class="ds-table-wrap">
         <table class="ds-table" aria-label="Workers">
@@ -121,7 +150,7 @@
           </thead>
           <tbody>
             @for (worker of workers(); track trackById($index, worker)) {
-              <tr>
+              <tr [class.workers-row--editing]="editingId() === worker.membershipId">
                 <td>{{ worker.displayName }}</td>
                 <td>{{ worker.phoneE164 }}</td>
                 <td>{{ worker.crewName || 'Unassigned' }}</td>
@@ -132,9 +161,19 @@
                   ></app-status-badge>
                 </td>
                 <td>
-                  <button class="ds-button ds-button--ghost" type="button" (click)="onEdit(worker)">
-                    Edit
-                  </button>
+                  <div class="workers-actions">
+                    @if (editingId() === worker.membershipId) {
+                      <span class="ds-chip">Editing</span>
+                    }
+                    <button
+                      class="ds-button ds-button--ghost"
+                      type="button"
+                      (click)="onEdit(worker)"
+                      [attr.aria-label]="'Edit worker ' + worker.displayName"
+                    >
+                      Edit
+                    </button>
+                  </div>
                 </td>
               </tr>
             }
