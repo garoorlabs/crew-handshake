@@ -1,4 +1,16 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Injector,
+  afterNextRender,
+  computed,
+  effect,
+  inject,
+  runInInjectionContext,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthSessionService } from '../../../core/auth/auth-session.service';
@@ -16,6 +28,10 @@ export class AuthLoginPage {
   private readonly session = inject(AuthSessionService);
   private readonly router = inject(Router);
   private readonly formBuilder = inject(FormBuilder);
+  private readonly injector = inject(Injector);
+
+  readonly phoneInput = viewChild<ElementRef<HTMLInputElement>>('phoneInput');
+  readonly codeInput = viewChild<ElementRef<HTMLInputElement>>('codeInput');
 
   readonly step = signal<'phone' | 'code'>('phone');
   readonly loading = signal(false);
@@ -84,6 +100,19 @@ export class AuthLoginPage {
     admin: '+14155550100',
     foreman: '+14155550101',
   };
+
+  constructor() {
+    effect(() => {
+      const step = this.step();
+      runInInjectionContext(this.injector, () => {
+        afterNextRender(() => {
+          const target =
+            step === 'phone' ? this.phoneInput()?.nativeElement : this.codeInput()?.nativeElement;
+          target?.focus();
+        });
+      });
+    });
+  }
 
   onSendCode(): void {
     if (this.phoneForm.invalid) {
