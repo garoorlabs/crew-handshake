@@ -3,7 +3,7 @@
     class="ds-button ds-button--secondary"
     type="button"
     (click)="load()"
-    [disabled]="loading()"
+    [disabled]="isBusy()"
   >
     Refresh
   </button>
@@ -19,14 +19,12 @@
         class="ds-input"
         type="text"
         formControlName="displayName"
-        [class.ds-input--error]="
-          form.controls.displayName.touched && form.controls.displayName.invalid
-        "
-        aria-describedby="foreman-name-error"
-        [attr.aria-invalid]="form.controls.displayName.touched && form.controls.displayName.invalid"
+        [class.ds-input--error]="!!nameError()"
+        [attr.aria-describedby]="nameErrorId()"
+        [attr.aria-invalid]="nameError() ? 'true' : null"
       />
-      @if (form.controls.displayName.touched && form.controls.displayName.invalid) {
-        <p id="foreman-name-error" class="ds-error-text" role="status">Name is required.</p>
+      @if (nameError()) {
+        <app-field-error [id]="nameErrorId()" [message]="nameError()"></app-field-error>
       }
     </div>
 
@@ -39,23 +37,33 @@
           type="tel"
           formControlName="phone"
           autocomplete="tel"
-          [class.ds-input--error]="form.controls.phone.touched && form.controls.phone.invalid"
-          aria-describedby="foreman-phone-error"
-          [attr.aria-invalid]="form.controls.phone.touched && form.controls.phone.invalid"
+          [class.ds-input--error]="!!phoneError()"
+          [attr.aria-describedby]="phoneErrorId()"
+          [attr.aria-invalid]="phoneError() ? 'true' : null"
         />
-        @if (form.controls.phone.touched && form.controls.phone.invalid) {
-          <p id="foreman-phone-error" class="ds-error-text" role="status">Phone is required.</p>
+        @if (phoneError()) {
+          <app-field-error [id]="phoneErrorId()" [message]="phoneError()"></app-field-error>
         }
       </div>
     }
 
-    <label class="ds-field ds-checkbox-field">
-      <span class="ds-label">Active</span>
-      <input type="checkbox" formControlName="active" />
-    </label>
+    <div class="foremen-active">
+      <label class="ds-field ds-checkbox-field" for="foreman-active">
+        <span class="ds-label">Active</span>
+        <input
+          id="foreman-active"
+          type="checkbox"
+          formControlName="active"
+          aria-describedby="foreman-active-help"
+        />
+      </label>
+      <p id="foreman-active-help" class="ds-helper">
+        Inactive foremen keep their history but cannot access crew tools.
+      </p>
+    </div>
 
     <div class="ds-inline-actions">
-      <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">
+      <button class="ds-button ds-button--primary" type="submit" [disabled]="isBusy()">
         {{ submitLabel() }}
       </button>
       @if (isEditing()) {
@@ -63,7 +71,7 @@
           class="ds-button ds-button--ghost"
           type="button"
           (click)="onCancelEdit()"
-          [disabled]="loading()"
+          [disabled]="isBusy()"
         >
           Cancel
         </button>
@@ -71,10 +79,19 @@
     </div>
   </form>
 
-  @if (error()) {
-    <div class="ds-alert ds-alert--error" role="status" aria-live="polite">
-      {{ error()?.message }}
-    </div>
+  @if (submitError()) {
+    <app-error-banner
+      [message]="submitError()?.message ?? 'Something went wrong.'"
+    ></app-error-banner>
+  }
+
+  @if (loadError()) {
+    <app-error-banner
+      [message]="loadError()?.message ?? 'Unable to load foremen.'"
+      [showRetry]="true"
+      retryLabel="Retry"
+      (retry)="load()"
+    ></app-error-banner>
   }
 
   @if (loading()) {
@@ -83,10 +100,12 @@
     </div>
   } @else {
     @if (foremen().length === 0) {
-      <app-empty-state
-        title="No foremen yet"
-        description="Add a foreman to assign crew leadership."
-      ></app-empty-state>
+      @if (!loadError()) {
+        <app-empty-state
+          title="No foremen yet"
+          description="Add a foreman to assign crew leadership."
+        ></app-empty-state>
+      }
     } @else {
       <div class="ds-table-wrap">
         <table class="ds-table" aria-label="Foremen">
@@ -100,7 +119,7 @@
           </thead>
           <tbody>
             @for (foreman of foremen(); track trackById($index, foreman)) {
-              <tr>
+              <tr [class.foremen-row--editing]="editingId() === foreman.membershipId">
                 <td>{{ foreman.displayName }}</td>
                 <td>{{ foreman.phoneE164 }}</td>
                 <td>
@@ -110,13 +129,19 @@
                   ></app-status-badge>
                 </td>
                 <td>
-                  <button
-                    class="ds-button ds-button--ghost"
-                    type="button"
-                    (click)="onEdit(foreman)"
-                  >
-                    Edit
-                  </button>
+                  <div class="foremen-actions">
+                    @if (editingId() === foreman.membershipId) {
+                      <span class="ds-chip">Editing</span>
+                    }
+                    <button
+                      class="ds-button ds-button--ghost"
+                      type="button"
+                      (click)="onEdit(foreman)"
+                      [attr.aria-label]="'Edit foreman ' + foreman.displayName"
+                    >
+                      Edit
+                    </button>
+                  </div>
                 </td>
               </tr>
             }

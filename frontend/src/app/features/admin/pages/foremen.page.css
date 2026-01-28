@@ -1,0 +1,17 @@
+.foremen-active {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+}
+
+.foremen-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ds-space-2);
+  flex-wrap: wrap;
+}
+
+.foremen-row--editing {
+  background: var(--ds-color-primary-subtle);
+}
