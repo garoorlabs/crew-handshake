@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthSessionService } from '../../auth/auth-session.service';
 
@@ -15,16 +15,27 @@ import { AuthSessionService } from '../../auth/auth-session.service';
 export class ForemanShellComponent {
   private readonly session = inject(AuthSessionService);
   private readonly router = inject(Router);
+  readonly menuOpen = signal(false);
 
   logout(): void {
     this.session.logout().subscribe({
       next: () => {
+        this.menuOpen.set(false);
         this.router.navigate(['/auth']);
       },
       error: () => {
+        this.menuOpen.set(false);
         this.router.navigate(['/auth']);
       },
     });
+  }
+
+  toggleMenu(): void {
+    this.menuOpen.update((open) => !open);
+  }
+
+  closeMenu(): void {
+    this.menuOpen.set(false);
   }
 
   get isLoggingOut(): boolean {
