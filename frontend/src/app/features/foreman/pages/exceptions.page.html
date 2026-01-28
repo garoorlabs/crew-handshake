@@ -53,35 +53,65 @@
         description="This crew has no open exceptions for the selected date."
       ></app-empty-state>
     } @else {
-      <div class="ds-table-wrap">
-        <table class="ds-table" aria-label="Exceptions">
-          <thead>
-            <tr>
-              <th>Worker</th>
-              <th>Type</th>
-              <th>Details</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (item of exceptions(); track item.exceptionId) {
+      <div class="foreman-exceptions-list">
+        <ul class="ds-list" role="list" aria-label="Exceptions">
+          @for (item of exceptions(); track item.exceptionId) {
+            <li class="ds-list__item">
+              <div class="ds-list__row">
+                <div class="foreman-exceptions-worker">{{ item.workerName }}</div>
+                <app-status-badge [tone]="'warning'" [label]="item.status"></app-status-badge>
+              </div>
+              <div class="foreman-exceptions-meta">
+                <div class="foreman-exceptions-meta__item">
+                  <span class="foreman-exceptions-meta__label">Type</span>
+                  <span>{{ item.type }}</span>
+                </div>
+                <div class="foreman-exceptions-meta__item">
+                  <span class="foreman-exceptions-meta__label">Details</span>
+                  <span>
+                    @if (item.type === 'MISSING_CHECK_OUT') {
+                      Missing check-out
+                    } @else {
+                      {{ item.reviewReason || 'Review request' }}
+                    }
+                  </span>
+                </div>
+              </div>
+            </li>
+          }
+        </ul>
+      </div>
+      <div class="foreman-exceptions-table">
+        <div class="ds-table-wrap">
+          <table class="ds-table" aria-label="Exceptions">
+            <thead>
               <tr>
-                <td>{{ item.workerName }}</td>
-                <td>{{ item.type }}</td>
-                <td>
-                  @if (item.type === 'MISSING_CHECK_OUT') {
-                    Missing check-out
-                  } @else {
-                    {{ item.reviewReason || 'Review request' }}
-                  }
-                </td>
-                <td>
-                  <app-status-badge [tone]="'warning'" [label]="item.status"></app-status-badge>
-                </td>
+                <th>Worker</th>
+                <th>Type</th>
+                <th>Details</th>
+                <th>Status</th>
               </tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              @for (item of exceptions(); track item.exceptionId) {
+                <tr>
+                  <td>{{ item.workerName }}</td>
+                  <td>{{ item.type }}</td>
+                  <td>
+                    @if (item.type === 'MISSING_CHECK_OUT') {
+                      Missing check-out
+                    } @else {
+                      {{ item.reviewReason || 'Review request' }}
+                    }
+                  </td>
+                  <td>
+                    <app-status-badge [tone]="'warning'" [label]="item.status"></app-status-badge>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </div>
     }
   }
