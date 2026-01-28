@@ -86,32 +86,59 @@
   @if (lastSend()) {
     <div class="ds-card">
       <h3 class="ds-section-title ds-section-title--compact">Send status</h3>
-      <div class="ds-table-wrap">
-        <table class="ds-table" aria-label="Send status">
-          <thead>
-            <tr>
-              <th>Worker</th>
-              <th>Phone</th>
-              <th>Status</th>
-              <th>Error</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (recipient of lastSend()?.recipients ?? []; track recipient.workerMembershipId) {
+      <div class="crew-calls-status-list">
+        <ul class="ds-list" role="list" aria-label="Send status">
+          @for (recipient of lastSend()?.recipients ?? []; track recipient.workerMembershipId) {
+            <li class="ds-list__item">
+              <div class="ds-list__row">
+                <div class="crew-calls-worker">{{ recipient.workerName }}</div>
+                <app-status-badge
+                  [tone]="recipient.sendStatus === 'SENT' ? 'success' : 'warning'"
+                  [label]="recipient.sendStatus"
+                ></app-status-badge>
+              </div>
+              <div class="crew-calls-meta">
+                <div class="crew-calls-meta__item">
+                  <span class="crew-calls-meta__label">Phone</span>
+                  <span>{{ recipient.phoneE164 }}</span>
+                </div>
+                <div class="crew-calls-meta__item">
+                  <span class="crew-calls-meta__label">Error</span>
+                  <span>{{ recipient.sendError || 'N/A' }}</span>
+                </div>
+              </div>
+            </li>
+          }
+        </ul>
+      </div>
+      <div class="crew-calls-status-table">
+        <div class="ds-table-wrap">
+          <table class="ds-table" aria-label="Send status">
+            <thead>
               <tr>
-                <td>{{ recipient.workerName }}</td>
-                <td>{{ recipient.phoneE164 }}</td>
-                <td>
-                  <app-status-badge
-                    [tone]="recipient.sendStatus === 'SENT' ? 'success' : 'warning'"
-                    [label]="recipient.sendStatus"
-                  ></app-status-badge>
-                </td>
-                <td>{{ recipient.sendError || 'N/A' }}</td>
+                <th>Worker</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Error</th>
               </tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              @for (recipient of lastSend()?.recipients ?? []; track recipient.workerMembershipId) {
+                <tr>
+                  <td>{{ recipient.workerName }}</td>
+                  <td>{{ recipient.phoneE164 }}</td>
+                  <td>
+                    <app-status-badge
+                      [tone]="recipient.sendStatus === 'SENT' ? 'success' : 'warning'"
+                      [label]="recipient.sendStatus"
+                    ></app-status-badge>
+                  </td>
+                  <td>{{ recipient.sendError || 'N/A' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   }
@@ -127,39 +154,72 @@
         description="Send a crew call to see delivery status."
       ></app-empty-state>
     } @else {
-      <div class="ds-table-wrap">
-        <table class="ds-table" aria-label="Crew calls">
-          <thead>
-            <tr>
-              <th>Start</th>
-              <th>Site</th>
-              <th>Meet point</th>
-              <th>Status</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (call of crewCalls(); track call.crewCallId) {
+      <div class="crew-calls-list">
+        <ul class="ds-list" role="list" aria-label="Crew calls">
+          @for (call of crewCalls(); track call.crewCallId) {
+            <li class="ds-list__item">
+              <div class="ds-list__row">
+                <div class="crew-calls-start">{{ call.startAt }}</div>
+                <app-status-badge [tone]="'info'" [label]="call.status"></app-status-badge>
+              </div>
+              <div class="crew-calls-meta">
+                <div class="crew-calls-meta__item">
+                  <span class="crew-calls-meta__label">Site</span>
+                  <span>{{ call.siteName }}</span>
+                </div>
+                <div class="crew-calls-meta__item">
+                  <span class="crew-calls-meta__label">Meet point</span>
+                  <span>{{ call.meetPoint }}</span>
+                </div>
+              </div>
+              <div class="crew-calls-actions">
+                <button
+                  class="ds-button ds-button--ghost"
+                  type="button"
+                  (click)="onSelectCall(call)"
+                >
+                  Resend
+                </button>
+              </div>
+            </li>
+          }
+        </ul>
+      </div>
+      <div class="crew-calls-table">
+        <div class="ds-table-wrap">
+          <table class="ds-table" aria-label="Crew calls">
+            <thead>
               <tr>
-                <td>{{ call.startAt }}</td>
-                <td>{{ call.siteName }}</td>
-                <td>{{ call.meetPoint }}</td>
-                <td>
-                  <app-status-badge [tone]="'info'" [label]="call.status"></app-status-badge>
-                </td>
-                <td>
-                  <button
-                    class="ds-button ds-button--ghost"
-                    type="button"
-                    (click)="onSelectCall(call)"
-                  >
-                    Resend
-                  </button>
-                </td>
+                <th>Start</th>
+                <th>Site</th>
+                <th>Meet point</th>
+                <th>Status</th>
+                <th></th>
               </tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              @for (call of crewCalls(); track call.crewCallId) {
+                <tr>
+                  <td>{{ call.startAt }}</td>
+                  <td>{{ call.siteName }}</td>
+                  <td>{{ call.meetPoint }}</td>
+                  <td>
+                    <app-status-badge [tone]="'info'" [label]="call.status"></app-status-badge>
+                  </td>
+                  <td>
+                    <button
+                      class="ds-button ds-button--ghost"
+                      type="button"
+                      (click)="onSelectCall(call)"
+                    >
+                      Resend
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </div>
     }
   }
