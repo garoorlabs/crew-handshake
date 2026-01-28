@@ -36,3 +36,51 @@
 .worker-option input {
   margin: 0;
 }
+
+.crews-list {
+  display: block;
+}
+
+.crews-table {
+  display: none;
+}
+
+.crews-name {
+  font-weight: var(--ds-font-weight-semibold);
+  color: var(--ds-color-text);
+}
+
+.crews-count {
+  font-size: var(--ds-font-size-small);
+  color: var(--ds-color-text-secondary);
+}
+
+.crews-meta {
+  display: grid;
+  gap: var(--ds-space-1);
+  font-size: var(--ds-font-size-small);
+  color: var(--ds-color-text-secondary);
+}
+
+.crews-meta__label {
+  color: var(--ds-color-text-muted);
+  font-weight: var(--ds-font-weight-medium);
+}
+
+.crews-list__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ds-space-2);
+  flex-wrap: wrap;
+}
+
+@media (min-width: 768px) {
+  .crews-list {
+    display: none;
+  }
+
+  .crews-table {
+    display: block;
+  }
+}

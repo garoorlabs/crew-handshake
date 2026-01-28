@@ -102,31 +102,56 @@
         description="Create a crew and assign its roster."
       ></app-empty-state>
     } @else {
-      <div class="ds-table-wrap">
-        <table class="ds-table" aria-label="Crews">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Foreman</th>
-              <th>Workers</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (crew of crews(); track trackCrew($index, crew)) {
+      <div class="crews-list">
+        <ul class="ds-list" role="list" aria-label="Crews">
+          @for (crew of crews(); track trackCrew($index, crew)) {
+            <li class="ds-list__item">
+              <div class="ds-list__row">
+                <div class="crews-name">{{ crew.name }}</div>
+                <div class="crews-count">{{ crew.workerCount }} workers</div>
+              </div>
+              <div class="crews-meta">
+                <div class="crews-meta__item">
+                  <span class="crews-meta__label">Foreman</span>
+                  <span>{{ crew.foremanName }}</span>
+                </div>
+              </div>
+              <div class="crews-list__actions">
+                <button class="ds-button ds-button--ghost" type="button" (click)="onEdit(crew)">
+                  Edit
+                </button>
+              </div>
+            </li>
+          }
+        </ul>
+      </div>
+      <div class="crews-table">
+        <div class="ds-table-wrap">
+          <table class="ds-table" aria-label="Crews">
+            <thead>
               <tr>
-                <td>{{ crew.name }}</td>
-                <td>{{ crew.foremanName }}</td>
-                <td>{{ crew.workerCount }}</td>
-                <td>
-                  <button class="ds-button ds-button--ghost" type="button" (click)="onEdit(crew)">
-                    Edit
-                  </button>
-                </td>
+                <th>Name</th>
+                <th>Foreman</th>
+                <th>Workers</th>
+                <th></th>
               </tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              @for (crew of crews(); track trackCrew($index, crew)) {
+                <tr>
+                  <td>{{ crew.name }}</td>
+                  <td>{{ crew.foremanName }}</td>
+                  <td>{{ crew.workerCount }}</td>
+                  <td>
+                    <button class="ds-button ds-button--ghost" type="button" (click)="onEdit(crew)">
+                      Edit
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </div>
     }
   }

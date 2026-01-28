@@ -4,6 +4,39 @@
   gap: var(--ds-space-1);
 }
 
+.workers-list {
+  display: block;
+}
+
+.workers-table {
+  display: none;
+}
+
+.workers-name {
+  font-weight: var(--ds-font-weight-semibold);
+  color: var(--ds-color-text);
+}
+
+.workers-meta {
+  display: grid;
+  gap: var(--ds-space-1);
+  font-size: var(--ds-font-size-small);
+  color: var(--ds-color-text-secondary);
+}
+
+.workers-meta__label {
+  color: var(--ds-color-text-muted);
+  font-weight: var(--ds-font-weight-medium);
+}
+
+.workers-list__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ds-space-2);
+  flex-wrap: wrap;
+}
+
 .workers-actions {
   display: flex;
   align-items: center;
@@ -14,4 +47,18 @@
 
 .workers-row--editing {
   background: var(--ds-color-primary-subtle);
+}
+
+.workers-item--editing {
+  background: var(--ds-color-primary-subtle);
+}
+
+@media (min-width: 768px) {
+  .workers-list {
+    display: none;
+  }
+
+  .workers-table {
+    display: block;
+  }
 }

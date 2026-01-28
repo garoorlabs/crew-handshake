@@ -98,46 +98,82 @@
         ></app-empty-state>
       }
     } @else {
-      <div class="ds-table-wrap">
-        <table class="ds-table" aria-label="Sites">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Address</th>
-              <th>Status</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (site of sites(); track trackById($index, site)) {
-              <tr [class.sites-row--editing]="editingId() === site.siteId">
-                <td>{{ site.name }}</td>
-                <td>{{ site.address || 'N/A' }}</td>
-                <td>
-                  <app-status-badge
-                    [tone]="site.active ? 'success' : 'warning'"
-                    [label]="site.active ? 'Active' : 'Inactive'"
-                  ></app-status-badge>
-                </td>
-                <td>
-                  <div class="sites-actions">
-                    @if (editingId() === site.siteId) {
-                      <span class="ds-chip">Editing</span>
-                    }
-                    <button
-                      class="ds-button ds-button--ghost"
-                      type="button"
-                      (click)="onEdit(site)"
-                      [attr.aria-label]="'Edit site ' + site.name"
-                    >
-                      Edit
-                    </button>
-                  </div>
-                </td>
+      <div class="sites-list">
+        <ul class="ds-list" role="list" aria-label="Sites">
+          @for (site of sites(); track trackById($index, site)) {
+            <li class="ds-list__item" [class.sites-item--editing]="editingId() === site.siteId">
+              <div class="ds-list__row">
+                <div class="sites-name">{{ site.name }}</div>
+                <app-status-badge
+                  [tone]="site.active ? 'success' : 'warning'"
+                  [label]="site.active ? 'Active' : 'Inactive'"
+                ></app-status-badge>
+              </div>
+              <div class="sites-meta">
+                <div class="sites-meta__item">
+                  <span class="sites-meta__label">Address</span>
+                  <span>{{ site.address || 'N/A' }}</span>
+                </div>
+              </div>
+              <div class="sites-list__actions">
+                @if (editingId() === site.siteId) {
+                  <span class="ds-chip">Editing</span>
+                }
+                <button
+                  class="ds-button ds-button--ghost"
+                  type="button"
+                  (click)="onEdit(site)"
+                  [attr.aria-label]="'Edit site ' + site.name"
+                >
+                  Edit
+                </button>
+              </div>
+            </li>
+          }
+        </ul>
+      </div>
+      <div class="sites-table">
+        <div class="ds-table-wrap">
+          <table class="ds-table" aria-label="Sites">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Status</th>
+                <th></th>
               </tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              @for (site of sites(); track trackById($index, site)) {
+                <tr [class.sites-row--editing]="editingId() === site.siteId">
+                  <td>{{ site.name }}</td>
+                  <td>{{ site.address || 'N/A' }}</td>
+                  <td>
+                    <app-status-badge
+                      [tone]="site.active ? 'success' : 'warning'"
+                      [label]="site.active ? 'Active' : 'Inactive'"
+                    ></app-status-badge>
+                  </td>
+                  <td>
+                    <div class="sites-actions">
+                      @if (editingId() === site.siteId) {
+                        <span class="ds-chip">Editing</span>
+                      }
+                      <button
+                        class="ds-button ds-button--ghost"
+                        type="button"
+                        (click)="onEdit(site)"
+                        [attr.aria-label]="'Edit site ' + site.name"
+                      >
+                        Edit
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </div>
     }
   }

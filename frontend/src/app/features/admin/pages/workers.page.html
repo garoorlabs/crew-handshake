@@ -137,48 +137,91 @@
         ></app-empty-state>
       }
     } @else {
-      <div class="ds-table-wrap">
-        <table class="ds-table" aria-label="Workers">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Phone</th>
-              <th>Crew</th>
-              <th>Status</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (worker of workers(); track trackById($index, worker)) {
-              <tr [class.workers-row--editing]="editingId() === worker.membershipId">
-                <td>{{ worker.displayName }}</td>
-                <td>{{ worker.phoneE164 }}</td>
-                <td>{{ worker.crewName || 'Unassigned' }}</td>
-                <td>
-                  <app-status-badge
-                    [tone]="worker.active ? 'success' : 'warning'"
-                    [label]="worker.active ? 'Active' : 'Inactive'"
-                  ></app-status-badge>
-                </td>
-                <td>
-                  <div class="workers-actions">
-                    @if (editingId() === worker.membershipId) {
-                      <span class="ds-chip">Editing</span>
-                    }
-                    <button
-                      class="ds-button ds-button--ghost"
-                      type="button"
-                      (click)="onEdit(worker)"
-                      [attr.aria-label]="'Edit worker ' + worker.displayName"
-                    >
-                      Edit
-                    </button>
-                  </div>
-                </td>
+      <div class="workers-list">
+        <ul class="ds-list" role="list" aria-label="Workers">
+          @for (worker of workers(); track trackById($index, worker)) {
+            <li
+              class="ds-list__item"
+              [class.workers-item--editing]="editingId() === worker.membershipId"
+            >
+              <div class="ds-list__row">
+                <div class="workers-name">{{ worker.displayName }}</div>
+                <app-status-badge
+                  [tone]="worker.active ? 'success' : 'warning'"
+                  [label]="worker.active ? 'Active' : 'Inactive'"
+                ></app-status-badge>
+              </div>
+              <div class="workers-meta">
+                <div class="workers-meta__item">
+                  <span class="workers-meta__label">Phone</span>
+                  <span>{{ worker.phoneE164 }}</span>
+                </div>
+                <div class="workers-meta__item">
+                  <span class="workers-meta__label">Crew</span>
+                  <span>{{ worker.crewName || 'Unassigned' }}</span>
+                </div>
+              </div>
+              <div class="workers-list__actions">
+                @if (editingId() === worker.membershipId) {
+                  <span class="ds-chip">Editing</span>
+                }
+                <button
+                  class="ds-button ds-button--ghost"
+                  type="button"
+                  (click)="onEdit(worker)"
+                  [attr.aria-label]="'Edit worker ' + worker.displayName"
+                >
+                  Edit
+                </button>
+              </div>
+            </li>
+          }
+        </ul>
+      </div>
+      <div class="workers-table">
+        <div class="ds-table-wrap">
+          <table class="ds-table" aria-label="Workers">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Crew</th>
+                <th>Status</th>
+                <th></th>
               </tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              @for (worker of workers(); track trackById($index, worker)) {
+                <tr [class.workers-row--editing]="editingId() === worker.membershipId">
+                  <td>{{ worker.displayName }}</td>
+                  <td>{{ worker.phoneE164 }}</td>
+                  <td>{{ worker.crewName || 'Unassigned' }}</td>
+                  <td>
+                    <app-status-badge
+                      [tone]="worker.active ? 'success' : 'warning'"
+                      [label]="worker.active ? 'Active' : 'Inactive'"
+                    ></app-status-badge>
+                  </td>
+                  <td>
+                    <div class="workers-actions">
+                      @if (editingId() === worker.membershipId) {
+                        <span class="ds-chip">Editing</span>
+                      }
+                      <button
+                        class="ds-button ds-button--ghost"
+                        type="button"
+                        (click)="onEdit(worker)"
+                        [attr.aria-label]="'Edit worker ' + worker.displayName"
+                      >
+                        Edit
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </div>
     }
   }
