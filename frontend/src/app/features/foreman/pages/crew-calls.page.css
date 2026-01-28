@@ -1,0 +1,47 @@
+.crew-calls-status-list,
+.crew-calls-list {
+  display: block;
+}
+
+.crew-calls-status-table,
+.crew-calls-table {
+  display: none;
+}
+
+.crew-calls-worker,
+.crew-calls-start {
+  font-weight: var(--ds-font-weight-semibold);
+  color: var(--ds-color-text);
+}
+
+.crew-calls-meta {
+  display: grid;
+  gap: var(--ds-space-1);
+  font-size: var(--ds-font-size-small);
+  color: var(--ds-color-text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.crew-calls-meta__label {
+  color: var(--ds-color-text-muted);
+  font-weight: var(--ds-font-weight-medium);
+}
+
+.crew-calls-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--ds-space-2);
+  flex-wrap: wrap;
+}
+
+@media (min-width: 768px) {
+  .crew-calls-status-list,
+  .crew-calls-list {
+    display: none;
+  }
+
+  .crew-calls-status-table,
+  .crew-calls-table {
+    display: block;
+  }
+}
