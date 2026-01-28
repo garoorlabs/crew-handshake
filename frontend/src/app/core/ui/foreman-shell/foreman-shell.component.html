@@ -2,37 +2,67 @@
   <a class="ds-skip-link" href="#main">Skip to content</a>
   <header class="shell">
     <div class="shell__inner">
-      <div class="shell__brand">Crew Handshake</div>
-      <nav class="shell__nav" aria-label="Foreman">
-        <a class="shell__link" routerLink="/f/today" routerLinkActive="shell__link--active"
-          >Today</a
-        >
-        <a class="shell__link" routerLink="/f/crew-calls" routerLinkActive="shell__link--active"
-          >Crew Calls</a
-        >
-        <a class="shell__link" routerLink="/f/roll-call" routerLinkActive="shell__link--active"
-          >Roll Call</a
-        >
-        <a class="shell__link" routerLink="/f/exceptions" routerLinkActive="shell__link--active"
-          >Exceptions</a
-        >
-        <a
-          class="shell__link"
-          routerLink="/f/time-adjustments"
-          routerLinkActive="shell__link--active"
-          >Time Adjustments</a
-        >
-      </nav>
-      <div class="shell__spacer"></div>
-      <div class="shell__actions">
+      <div class="shell__top">
+        <div class="shell__brand">Crew Handshake</div>
         <button
-          class="ds-button ds-button--ghost"
+          class="ds-button ds-button--secondary shell__menu-toggle"
           type="button"
-          (click)="logout()"
-          [disabled]="isLoggingOut"
+          (click)="toggleMenu()"
+          aria-controls="foreman-nav"
+          [attr.aria-expanded]="menuOpen() ? 'true' : 'false'"
         >
-          Log out
+          {{ menuOpen() ? 'Close menu' : 'Menu' }}
         </button>
+      </div>
+      <div class="shell__menu" [class.shell__menu--open]="menuOpen()">
+        <nav id="foreman-nav" class="shell__nav" aria-label="Foreman">
+          <a
+            class="shell__link"
+            routerLink="/f/today"
+            routerLinkActive="shell__link--active"
+            (click)="closeMenu()"
+            >Today</a
+          >
+          <a
+            class="shell__link"
+            routerLink="/f/crew-calls"
+            routerLinkActive="shell__link--active"
+            (click)="closeMenu()"
+            >Crew Calls</a
+          >
+          <a
+            class="shell__link"
+            routerLink="/f/roll-call"
+            routerLinkActive="shell__link--active"
+            (click)="closeMenu()"
+            >Roll Call</a
+          >
+          <a
+            class="shell__link"
+            routerLink="/f/exceptions"
+            routerLinkActive="shell__link--active"
+            (click)="closeMenu()"
+            >Exceptions</a
+          >
+          <a
+            class="shell__link"
+            routerLink="/f/time-adjustments"
+            routerLinkActive="shell__link--active"
+            (click)="closeMenu()"
+            >Time Adjustments</a
+          >
+        </nav>
+        <div class="shell__spacer"></div>
+        <div class="shell__actions">
+          <button
+            class="ds-button ds-button--ghost"
+            type="button"
+            (click)="logout()"
+            [disabled]="isLoggingOut"
+          >
+            Log out
+          </button>
+        </div>
       </div>
     </div>
   </header>
