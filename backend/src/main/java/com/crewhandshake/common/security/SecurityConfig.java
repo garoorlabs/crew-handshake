@@ -8,6 +8,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -16,10 +17,12 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                  SessionAuthFilter sessionAuthFilter,
-                                                 CsrfCookieFilter csrfCookieFilter) throws Exception {
+                                                 CsrfCookieFilter csrfCookieFilter,
+                                                 CookieCsrfTokenRepository csrfTokenRepository) throws Exception {
     http
         .csrf(csrf -> csrf
-            .csrfTokenRepository(csrfTokenRepository())
+            .csrfTokenRepository(csrfTokenRepository)
+            .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
             .ignoringRequestMatchers(
                 new AntPathRequestMatcher("/api/v1/auth/**"),
                 new AntPathRequestMatcher("/api/v1/public/**"),
@@ -38,7 +41,8 @@ public class SecurityConfig {
     return http.build();
   }
 
-  private CookieCsrfTokenRepository csrfTokenRepository() {
+  @Bean
+  public CookieCsrfTokenRepository csrfTokenRepository() {
     CookieCsrfTokenRepository repository = CookieCsrfTokenRepository.withHttpOnlyFalse();
     repository.setCookieName("CH-XSRF-TOKEN");
     repository.setHeaderName("X-CH-XSRF-TOKEN");
