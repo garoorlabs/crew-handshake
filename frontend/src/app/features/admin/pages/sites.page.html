@@ -3,7 +3,7 @@
     class="ds-button ds-button--secondary"
     type="button"
     (click)="load()"
-    [disabled]="loading()"
+    [disabled]="isBusy()"
   >
     Refresh
   </button>
@@ -19,12 +19,12 @@
         class="ds-input"
         type="text"
         formControlName="name"
-        [class.ds-input--error]="form.controls.name.touched && form.controls.name.invalid"
-        aria-describedby="site-name-error"
-        [attr.aria-invalid]="form.controls.name.touched && form.controls.name.invalid"
+        [class.ds-input--error]="!!nameError()"
+        [attr.aria-describedby]="nameErrorId()"
+        [attr.aria-invalid]="nameError() ? 'true' : null"
       />
-      @if (form.controls.name.touched && form.controls.name.invalid) {
-        <p id="site-name-error" class="ds-error-text" role="status">Site name is required.</p>
+      @if (nameError()) {
+        <app-field-error [id]="nameErrorId()" [message]="nameError()"></app-field-error>
       }
     </div>
 
@@ -38,13 +38,23 @@
       <textarea id="site-notes" class="ds-textarea" formControlName="notes"></textarea>
     </div>
 
-    <label class="ds-field ds-checkbox-field">
-      <span class="ds-label">Active</span>
-      <input type="checkbox" formControlName="active" />
-    </label>
+    <div class="sites-active">
+      <label class="ds-field ds-checkbox-field" for="site-active">
+        <span class="ds-label">Active</span>
+        <input
+          id="site-active"
+          type="checkbox"
+          formControlName="active"
+          aria-describedby="site-active-help"
+        />
+      </label>
+      <p id="site-active-help" class="ds-helper">
+        Inactive sites stay in your list but are hidden from crew call send options.
+      </p>
+    </div>
 
     <div class="ds-inline-actions">
-      <button class="ds-button ds-button--primary" type="submit" [disabled]="loading()">
+      <button class="ds-button ds-button--primary" type="submit" [disabled]="isBusy()">
         {{ submitLabel() }}
       </button>
       @if (isEditing()) {
@@ -52,7 +62,7 @@
           class="ds-button ds-button--ghost"
           type="button"
           (click)="onCancelEdit()"
-          [disabled]="loading()"
+          [disabled]="isBusy()"
         >
           Cancel
         </button>
@@ -60,10 +70,19 @@
     </div>
   </form>
 
-  @if (error()) {
-    <div class="ds-alert ds-alert--error" role="status" aria-live="polite">
-      {{ error()?.message }}
-    </div>
+  @if (submitError()) {
+    <app-error-banner
+      [message]="submitError()?.message ?? 'Something went wrong.'"
+    ></app-error-banner>
+  }
+
+  @if (loadError()) {
+    <app-error-banner
+      [message]="loadError()?.message ?? 'Unable to load sites.'"
+      [showRetry]="true"
+      retryLabel="Retry"
+      (retry)="load()"
+    ></app-error-banner>
   }
 
   @if (loading()) {
@@ -72,10 +91,12 @@
     </div>
   } @else {
     @if (sites().length === 0) {
-      <app-empty-state
-        title="No sites yet"
-        description="Add job sites so foremen can send crew calls."
-      ></app-empty-state>
+      @if (!loadError()) {
+        <app-empty-state
+          title="No sites yet"
+          description="Add job sites so foremen can send crew calls."
+        ></app-empty-state>
+      }
     } @else {
       <div class="ds-table-wrap">
         <table class="ds-table" aria-label="Sites">
@@ -89,7 +110,7 @@
           </thead>
           <tbody>
             @for (site of sites(); track trackById($index, site)) {
-              <tr>
+              <tr [class.sites-row--editing]="editingId() === site.siteId">
                 <td>{{ site.name }}</td>
                 <td>{{ site.address || 'N/A' }}</td>
                 <td>
@@ -99,9 +120,19 @@
                   ></app-status-badge>
                 </td>
                 <td>
-                  <button class="ds-button ds-button--ghost" type="button" (click)="onEdit(site)">
-                    Edit
-                  </button>
+                  <div class="sites-actions">
+                    @if (editingId() === site.siteId) {
+                      <span class="ds-chip">Editing</span>
+                    }
+                    <button
+                      class="ds-button ds-button--ghost"
+                      type="button"
+                      (click)="onEdit(site)"
+                      [attr.aria-label]="'Edit site ' + site.name"
+                    >
+                      Edit
+                    </button>
+                  </div>
                 </td>
               </tr>
             }

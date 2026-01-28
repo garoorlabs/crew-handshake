@@ -1,0 +1,17 @@
+.sites-active {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+}
+
+.sites-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ds-space-2);
+  flex-wrap: wrap;
+}
+
+.sites-row--editing {
+  background: var(--ds-color-primary-subtle);
+}
